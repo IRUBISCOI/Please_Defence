@@ -29,6 +29,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	UAnimMontage* AnimMontage_Shoot;
+	UAnimMontage* AnimMontage_Reload;
+
 protected:
 
 	/** Resets HMD orientation in VR. */
@@ -57,6 +60,19 @@ protected:
 
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
+
+	void Shoot();
+	void Reload();
+
+	int Weapon_Damage = 15;
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	void Set_Weapon_Damage(int Damage);
+
+public: 
+	UFUNCTION(BlueprintCallable)
+	int Get_Weapon_Damage();
 
 protected:
 	// APawn interface

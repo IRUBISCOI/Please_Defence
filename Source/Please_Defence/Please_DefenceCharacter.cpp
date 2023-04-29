@@ -23,7 +23,7 @@ APlease_DefenceCharacter::APlease_DefenceCharacter()
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
@@ -43,6 +43,11 @@ APlease_DefenceCharacter::APlease_DefenceCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Shoot(TEXT("AnimMontage'/Game/RifleAnimsetPro/Animations/RifleAnimSet/Rifle_ShootOnce_Montage.Rifle_ShootOnce_Montage'"));
+	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Reload(TEXT("AnimMontage'/Game/RifleAnimsetPro/Animations/RifleAnimSet/Rifle_Reload_2_Montage.Rifle_Reload_2_Montage'"));
+
+	AnimMontage_Shoot = montage_Shoot.Object;
+	AnimMontage_Reload = montage_Reload.Object;
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -74,6 +79,9 @@ void APlease_DefenceCharacter::SetupPlayerInputComponent(class UInputComponent* 
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &APlease_DefenceCharacter::OnResetVR);
+
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &APlease_DefenceCharacter::Shoot);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &APlease_DefenceCharacter::Reload);
 }
 
 
@@ -137,4 +145,25 @@ void APlease_DefenceCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void APlease_DefenceCharacter::Shoot()
+{
+	PlayAnimMontage(AnimMontage_Shoot);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Player Damage = %d"), Weapon_Damage));
+}
+
+void APlease_DefenceCharacter::Reload()
+{
+	PlayAnimMontage(AnimMontage_Reload);
+}
+
+void APlease_DefenceCharacter::Set_Weapon_Damage(int Damage)
+{
+	Weapon_Damage = Damage;
+}
+
+int APlease_DefenceCharacter::Get_Weapon_Damage()
+{
+	return Weapon_Damage;
 }
