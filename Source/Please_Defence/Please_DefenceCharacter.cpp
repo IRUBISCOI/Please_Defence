@@ -8,9 +8,22 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Weapon.h"
 
 //////////////////////////////////////////////////////////////////////////
 // APlease_DefenceCharacter
+
+void APlease_DefenceCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//SpawnActor;
+	AWeapon* weapon = GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass(), GetActorTransform());
+
+	weapon->AttachToComponent(this->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("weapon"));
+
+	//bUseControllerRotationYaw = false;
+}
 
 APlease_DefenceCharacter::APlease_DefenceCharacter()
 {
@@ -51,6 +64,8 @@ APlease_DefenceCharacter::APlease_DefenceCharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
+
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
