@@ -11,6 +11,8 @@ class APlease_DefenceCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	virtual void BeginPlay() override;
+
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -31,6 +33,7 @@ public:
 
 	UAnimMontage* AnimMontage_Shoot;
 	UAnimMontage* AnimMontage_Reload;
+
 
 protected:
 
