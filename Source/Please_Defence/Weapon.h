@@ -33,4 +33,9 @@ public:
 	ACharacter* OwnChar;
 
 	int Ammo;
+	int Damage;
+
+	void Shoot();
+
+	void PlaySound();
 };

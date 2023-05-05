@@ -31,6 +31,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	class AWeapon* weapon;
 	UAnimMontage* AnimMontage_Shoot;
 	UAnimMontage* AnimMontage_Reload;
 

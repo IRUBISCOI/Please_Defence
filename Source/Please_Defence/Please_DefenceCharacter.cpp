@@ -18,9 +18,11 @@ void APlease_DefenceCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	//SpawnActor;
-	AWeapon* weapon = GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass(), GetActorTransform());
+	weapon = GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass(), GetActorTransform());
 
 	weapon->AttachToComponent(this->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("weapon"));
+
+	weapon->OwnChar = this;
 
 	//bUseControllerRotationYaw = false;
 }
@@ -166,6 +168,8 @@ void APlease_DefenceCharacter::Shoot()
 {
 	PlayAnimMontage(AnimMontage_Shoot);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Player Damage = %d"), Weapon_Damage));
+	weapon->PlaySound();
+	weapon->Shoot();
 }
 
 void APlease_DefenceCharacter::Reload()
@@ -176,6 +180,7 @@ void APlease_DefenceCharacter::Reload()
 void APlease_DefenceCharacter::Set_Weapon_Damage(int Damage)
 {
 	Weapon_Damage = Damage;
+	weapon->Damage = Damage;
 }
 
 int APlease_DefenceCharacter::Get_Weapon_Damage()

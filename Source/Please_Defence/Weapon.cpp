@@ -4,6 +4,9 @@
 #include "Weapon.h"
 #include "Components/AudioComponent.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+
 
 // Sets default values
 AWeapon::AWeapon()
@@ -20,11 +23,20 @@ AWeapon::AWeapon()
 		Mesh->SetStaticMesh(mesh.Object);
 	}
 
+	//
 	RootComponent = Mesh;
 	Mesh->SetCollisionProfileName("NoCollision");
 	Mesh->SetSimulatePhysics(false);
 
 	Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+
+	ConstructorHelpers::FObjectFinder<USoundBase> audio(TEXT("SoundWave'/Game/StarterContent/Audio/Explosion01.Explosion01'"));
+	if (audio.Succeeded())
+	{
+		Audio->SetSound(audio.Object);
+	}
+
+	Audio->bAutoActivate = false;
 	Audio->SetupAttachment(RootComponent);
 
 	Ammo = 30;
@@ -44,5 +56,42 @@ void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AWeapon::Shoot()
+{
+	APlayerController* shooter = GetWorld()->GetFirstPlayerController();
+	if (shooter == OwnChar->GetController())
+	{
+		FVector forward = shooter->PlayerCameraManager->GetActorForwardVector();
+
+		FVector start = (forward * 350) + shooter->PlayerCameraManager->GetCameraLocation();
+		FVector end = (forward * 5000) + shooter->PlayerCameraManager->GetCameraLocation();
+
+		FHitResult result;
+
+		bool isHit = GetWorld()->LineTraceSingleByObjectType(result, start, end, ECollisionChannel::ECC_WorldDynamic);
+
+		DrawDebugLine(GetWorld(), start, end, FColor::Yellow, false, 1.0f);
+
+		if (result.Actor != nullptr)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("%s"), *result.GetActor()->GetName()));
+		}
+
+		if (isHit)
+		{
+			ACharacter* HitChar = Cast<ACharacter>(result.GetActor());
+			if (HitChar)
+			{
+				UGameplayStatics::ApplyDamage(HitChar, Damage, OwnChar->GetController(), this, UDamageType::StaticClass());
+			}
+		}
+	}
+}
+
+void AWeapon::PlaySound()
+{
+	Audio->Play();
 }
 
