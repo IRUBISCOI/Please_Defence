@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Gold_Pocket.h"
 
 
 // Sets default values
@@ -95,10 +96,16 @@ void AWeapon::Shoot()
 
 		if (isHit)
 		{
-			ACharacter* HitChar = Cast<ACharacter>(result.GetActor());
-			if (HitChar)
+			AGold_Pocket* HitObject = Cast<AGold_Pocket>(result.GetActor());
+			if (HitObject)
 			{
-				UGameplayStatics::ApplyDamage(HitChar, Damage, OwnChar->GetController(), this, UDamageType::StaticClass());
+				UGameplayStatics::ApplyDamage(HitObject, Damage, OwnChar->GetController(), this, UDamageType::StaticClass());
+			}
+
+			AActor* HitMonster = Cast<AActor>(result.GetActor());
+			if (HitMonster)
+			{
+				UGameplayStatics::ApplyDamage(HitMonster, Damage, OwnChar->GetController(), this, UDamageType::StaticClass());
 			}
 		}
 	}
@@ -113,5 +120,10 @@ void AWeapon::Fire_Effect()
 {
 	ParticleSystem = LoadObject<UParticleSystem>(nullptr, TEXT("ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"), nullptr, LOAD_None, nullptr);
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, Mesh->GetSocketLocation("Muzzle"), Mesh->GetSocketRotation("Muzzle"), FVector(0.2f, 0.2f, 0.2f)); //FVector(0.3f, 0.3f, 0.3f)
+}
+
+void AWeapon::Notify_Reload()
+{
+
 }
 

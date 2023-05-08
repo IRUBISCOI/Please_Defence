@@ -27,6 +27,11 @@ void APlease_DefenceCharacter::BeginPlay()
 	//bUseControllerRotationYaw = false;
 }
 
+void APlease_DefenceCharacter::Tick(float DeltaTime)
+{
+	ControlPitch = GetControlRotation().Pitch;
+}
+
 APlease_DefenceCharacter::APlease_DefenceCharacter()
 {
 	// Set size for collision capsule
@@ -67,6 +72,11 @@ APlease_DefenceCharacter::APlease_DefenceCharacter()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
+void APlease_DefenceCharacter::OnNotifyReload()
+{
+
+}
+
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -81,6 +91,8 @@ void APlease_DefenceCharacter::SetupPlayerInputComponent(class UInputComponent* 
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlease_DefenceCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlease_DefenceCharacter::MoveRight);
+
+	PlayerInputComponent->BindAction("Construct", IE_Released, this, &APlease_DefenceCharacter::ToggleMode);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
@@ -162,6 +174,23 @@ void APlease_DefenceCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void APlease_DefenceCharacter::ToggleMode()
+{
+	if (IsEquipWeapon)
+	{
+		IsEquipWeapon = false;
+		weapon->Mesh->SetVisibility(false);
+		bUseControllerRotationYaw = false;
+	}
+	else
+	{
+		IsEquipWeapon = true;
+		weapon->Mesh->SetVisibility(true);
+		bUseControllerRotationYaw = true;
+	}
+
 }
 
 void APlease_DefenceCharacter::Shoot()
