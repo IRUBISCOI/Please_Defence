@@ -30,6 +30,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAudioComponent* Audio;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UParticleSystem* FireEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UParticleSystem* ParticleSystem;
+
 	ACharacter* OwnChar;
 
 	int Ammo;
@@ -38,4 +44,6 @@ public:
 	void Shoot();
 
 	void PlaySound();
+
+	void Fire_Effect();
 };

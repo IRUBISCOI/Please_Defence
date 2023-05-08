@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "Particles/ParticleSystemComponent.h"
 
 
 // Sets default values
@@ -38,6 +39,19 @@ AWeapon::AWeapon()
 
 	Audio->bAutoActivate = false;
 	Audio->SetupAttachment(RootComponent);
+
+	//FireEffect = CreateDefaultSubobject<UParticleSystem>(TEXT("FireEffect"));
+
+
+	//ConstructorHelpers::FObjectFinder<UParticleSystem> fire_effect(TEXT("ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"));
+
+	//if (fire_effect.Succeeded())
+	//{
+	//	FireEffect = fire_effect.Object;
+	//}
+
+	//FireEffect->bAutoActivate = false;
+	//FireEffect->SetupAttachment(RootComponent);
 
 	Ammo = 30;
 
@@ -93,5 +107,11 @@ void AWeapon::Shoot()
 void AWeapon::PlaySound()
 {
 	Audio->Play();
+}
+
+void AWeapon::Fire_Effect()
+{
+	ParticleSystem = LoadObject<UParticleSystem>(nullptr, TEXT("ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"), nullptr, LOAD_None, nullptr);
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, Mesh->GetSocketLocation("Muzzle"), Mesh->GetSocketRotation("Muzzle"), FVector(0.2f, 0.2f, 0.2f)); //FVector(0.3f, 0.3f, 0.3f)
 }
 
