@@ -19,8 +19,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void CalculateHp(int CurHealthPoint, int MaxHealthPoint);
+
+	int CurHP = 1000;
+	int MaxHP = 1000;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 };

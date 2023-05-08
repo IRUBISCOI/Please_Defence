@@ -43,6 +43,8 @@ public:
 
 	void Shoot();
 
+	void Notify_Reload();
+
 	void PlaySound();
 
 	void Fire_Effect();

@@ -2,6 +2,7 @@
 
 
 #include "Gold_Pocket.h"
+#include "Please_DefenceCharacter.h"
 
 // Sets default values
 AGold_Pocket::AGold_Pocket()
@@ -23,5 +24,18 @@ void AGold_Pocket::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+float AGold_Pocket::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+		FString::Printf(TEXT("TakeDamage Damage=%f EventInstigator=%s"), DamageAmount, *EventInstigator->GetName()));
+
+	CurHP = CurHP - DamageAmount;
+	CurHP = FMath::Clamp((float)CurHP, 0.0f, (float)MaxHP);
+
+	CalculateHp(CurHP, MaxHP);
+
+	return 0.0f;
 }
 

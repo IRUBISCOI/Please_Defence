@@ -13,6 +13,9 @@ class APlease_DefenceCharacter : public ACharacter
 
 	virtual void BeginPlay() override;
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -31,10 +34,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	UFUNCTION(BlueprintCallable)
+
+	void OnNotifyReload();
+
 	class AWeapon* weapon;
 	UAnimMontage* AnimMontage_Shoot;
 	UAnimMontage* AnimMontage_Reload;
-
 
 protected:
 
@@ -46,6 +52,8 @@ protected:
 
 	/** Called for side to side input */
 	void MoveRight(float Value);
+
+	void ToggleMode();
 
 	/** 
 	 * Called via input to turn at a given rate. 
@@ -68,6 +76,9 @@ protected:
 	void Shoot();
 	void Reload();
 
+	float ControlPitch;
+	bool IsEquipWeapon = true;
+
 	int Weapon_Damage = 15;
 
 protected:
@@ -77,6 +88,13 @@ protected:
 public: 
 	UFUNCTION(BlueprintCallable)
 	int Get_Weapon_Damage();
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE float GetControlPitch() const { return ControlPitch; }
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE bool GetIsEquipWeapon() const { return IsEquipWeapon; }
+	
 
 protected:
 	// APawn interface
