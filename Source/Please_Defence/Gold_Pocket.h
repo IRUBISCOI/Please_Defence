@@ -22,13 +22,25 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void CalculateHp(int CurHealthPoint, int MaxHealthPoint);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void Gain_Gold(APlease_DefenceCharacter* target);
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	class APlease_DefenceCharacter* Gainer;
+
 	int CurHP = 1000;
 	int MaxHP = 1000;
+
+	UPROPERTY(BlueprintReadWrite)
+	int Owning_Gold = 0;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION(BlueprintCallable)
+	void AddDamage(float Damage);
 
 };

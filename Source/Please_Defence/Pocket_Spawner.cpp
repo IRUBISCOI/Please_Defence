@@ -15,7 +15,7 @@ APocket_Spawner::APocket_Spawner()
 	RootComponent = SphereComponent;
 
 
-	SphereComponent->InitSphereRadius(40.0f);
+	SphereComponent->InitSphereRadius(10.0f);
 }
 
 // Called when the game starts or when spawned

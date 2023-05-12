@@ -39,7 +39,7 @@ public:
 	ACharacter* OwnChar;
 
 	int Ammo;
-	int Damage;
+	int Damage = 15;
 
 	void Shoot();
 

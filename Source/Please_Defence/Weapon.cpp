@@ -99,12 +99,15 @@ void AWeapon::Shoot()
 			AGold_Pocket* HitObject = Cast<AGold_Pocket>(result.GetActor());
 			if (HitObject)
 			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("GoldPocket")));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("ApplyDamage : %d"), Damage));
 				UGameplayStatics::ApplyDamage(HitObject, Damage, OwnChar->GetController(), this, UDamageType::StaticClass());
 			}
 
-			AActor* HitMonster = Cast<AActor>(result.GetActor());
+			ACharacter* HitMonster = Cast<ACharacter>(result.GetActor());
 			if (HitMonster)
 			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Monster")));
 				UGameplayStatics::ApplyDamage(HitMonster, Damage, OwnChar->GetController(), this, UDamageType::StaticClass());
 			}
 		}

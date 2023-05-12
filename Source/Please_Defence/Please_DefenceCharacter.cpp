@@ -196,7 +196,8 @@ void APlease_DefenceCharacter::ToggleMode()
 void APlease_DefenceCharacter::Shoot()
 {
 	PlayAnimMontage(AnimMontage_Shoot);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, FString::Printf(TEXT("Player Damage = %d"), Weapon_Damage));
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Player Damage = %d"), Weapon_Damage));
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Weapon Damage = %d"), weapon->Damage));
 	weapon->PlaySound();
 	weapon->Fire_Effect();
 	weapon->Shoot();

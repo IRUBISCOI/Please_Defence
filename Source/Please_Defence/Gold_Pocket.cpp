@@ -3,6 +3,8 @@
 
 #include "Gold_Pocket.h"
 #include "Please_DefenceCharacter.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AGold_Pocket::AGold_Pocket()
@@ -18,7 +20,12 @@ void AGold_Pocket::BeginPlay()
 	Super::BeginPlay();
 	
 }
-
+/*
+void AGold_Pocket::Gain_Gold_Implementation(APlease_DefenceCharacter* target)
+{
+	target->Set_Gold(Owning_Gold);
+}
+*/
 // Called every frame
 void AGold_Pocket::Tick(float DeltaTime)
 {
@@ -28,14 +35,34 @@ void AGold_Pocket::Tick(float DeltaTime)
 
 float AGold_Pocket::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("TakeDamage")));
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow,
 		FString::Printf(TEXT("TakeDamage Damage=%f EventInstigator=%s"), DamageAmount, *EventInstigator->GetName()));
+	
+	Gainer = Cast<APlease_DefenceCharacter>(EventInstigator->GetInstigator());
 
-	CurHP = CurHP - DamageAmount;
-	CurHP = FMath::Clamp((float)CurHP, 0.0f, (float)MaxHP);
-
-	CalculateHp(CurHP, MaxHP);
+	AddDamage(DamageAmount);
 
 	return 0.0f;
 }
+
+void AGold_Pocket::AddDamage(float Damage)
+{
+	CurHP = CurHP - Damage;
+	CurHP = FMath::Clamp((float)CurHP, 0.0f, (float)MaxHP);
+
+	if (!CurHP)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Destroy!")));
+		UParticleSystem* ParticleSystem = LoadObject<UParticleSystem>(nullptr, TEXT("ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"), nullptr, LOAD_None, nullptr);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, GetActorLocation(), GetActorRotation(), FVector(1.f, 1.f, 1.f));
+		Gain_Gold(Gainer);
+		Destroy();
+	}
+
+	CalculateHp(CurHP, MaxHP);
+}
+
+
+
 
