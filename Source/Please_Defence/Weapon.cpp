@@ -91,7 +91,7 @@ void AWeapon::Shoot()
 
 		if (result.Actor != nullptr)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("%s"), *result.GetActor()->GetName()));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("%s"), *result.GetActor()->GetName()));
 		}
 
 		if (isHit)

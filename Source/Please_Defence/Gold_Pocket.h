@@ -23,10 +23,10 @@ protected:
 	void CalculateHp(int CurHealthPoint, int MaxHealthPoint);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void Gain_Gold(APlease_DefenceCharacter* target);
+	void Gain_Gold(AController* target);
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
-	class APlease_DefenceCharacter* Gainer;
+	AController* Gainer;
 
 	int CurHP = 1000;
 	int MaxHP = 1000;

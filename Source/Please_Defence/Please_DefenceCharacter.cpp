@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Weapon.h"
+#include "Please_Defence_PlayerState.h"
 
 //////////////////////////////////////////////////////////////////////////
 // APlease_DefenceCharacter
@@ -23,6 +24,13 @@ void APlease_DefenceCharacter::BeginPlay()
 	weapon->AttachToComponent(this->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("weapon"));
 
 	weapon->OwnChar = this;
+
+	playerState = Cast<APlease_Defence_PlayerState>(GetPlayerState());
+	
+	if(playerState)
+	{
+		playerState->Set_Weapon(weapon);
+	}
 
 	//bUseControllerRotationYaw = false;
 }
@@ -195,26 +203,25 @@ void APlease_DefenceCharacter::ToggleMode()
 
 void APlease_DefenceCharacter::Shoot()
 {
+	int Ammo = playerState->Ammo;
+
+	if (!Ammo)
+	{
+		return;
+	}
+
 	PlayAnimMontage(AnimMontage_Shoot);
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Player Damage = %d"), Weapon_Damage));
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Weapon Damage = %d"), weapon->Damage));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Player Damage = %d"), Weapon_Damage));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Weapon Damage = %d"), weapon->Damage));
 	weapon->PlaySound();
 	weapon->Fire_Effect();
 	weapon->Shoot();
+
+	playerState->Ammo = Ammo - 1;
+	playerState->UI_AmmoUpdate();
 }
 
 void APlease_DefenceCharacter::Reload()
 {
 	PlayAnimMontage(AnimMontage_Reload);
-}
-
-void APlease_DefenceCharacter::Set_Weapon_Damage(int Damage)
-{
-	Weapon_Damage = Damage;
-	weapon->Damage = Damage;
-}
-
-int APlease_DefenceCharacter::Get_Weapon_Damage()
-{
-	return Weapon_Damage;
 }

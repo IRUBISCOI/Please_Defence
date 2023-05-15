@@ -35,10 +35,10 @@ public:
 	float BaseLookUpRate;
 
 	UFUNCTION(BlueprintCallable)
-
 	void OnNotifyReload();
 
 	class AWeapon* weapon;
+	class APlease_Defence_PlayerState* playerState;
 	UAnimMontage* AnimMontage_Shoot;
 	UAnimMontage* AnimMontage_Reload;
 
@@ -79,24 +79,7 @@ protected:
 	float ControlPitch;
 	bool IsEquipWeapon = true;
 
-	int Weapon_Damage = 15;
-
-	UPROPERTY(BlueprintReadWrite)
-	int Gold = 0;
-
-protected:
-	UFUNCTION(BlueprintCallable)
-	void Set_Weapon_Damage(int Damage);
-
 public: 
-	UFUNCTION(BlueprintCallable)
-	int Get_Weapon_Damage();
-
-	UFUNCTION(BlueprintCallable)
-	void Set_Gold(int newGold) { Gold += newGold; };
-
-	UFUNCTION(BlueprintCallable)
-	int Get_Gold() { return Gold; };
 
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE float GetControlPitch() const { return ControlPitch; }

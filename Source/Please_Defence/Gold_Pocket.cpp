@@ -35,11 +35,11 @@ void AGold_Pocket::Tick(float DeltaTime)
 
 float AGold_Pocket::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("TakeDamage")));
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow,
-		FString::Printf(TEXT("TakeDamage Damage=%f EventInstigator=%s"), DamageAmount, *EventInstigator->GetName()));
+	//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow,
+	//	FString::Printf(TEXT("TakeDamage Damage=%f EventInstigator=%s"), DamageAmount, *EventInstigator->GetName()));
 	
-	Gainer = Cast<APlease_DefenceCharacter>(EventInstigator->GetInstigator());
+	//Gainer = Cast<APlease_DefenceCharacter>(EventInstigator->GetInstigator());
+	Gainer = EventInstigator;
 
 	AddDamage(DamageAmount);
 
