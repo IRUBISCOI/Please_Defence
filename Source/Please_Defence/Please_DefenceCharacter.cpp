@@ -203,6 +203,11 @@ void APlease_DefenceCharacter::ToggleMode()
 
 void APlease_DefenceCharacter::Shoot()
 {
+	if (!IsEquipWeapon)
+	{
+		return;
+	}
+
 	int Ammo = playerState->Ammo;
 
 	if (!Ammo)
