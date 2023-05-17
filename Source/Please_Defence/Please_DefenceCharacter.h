@@ -53,7 +53,11 @@ protected:
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ToggleMode();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void Construstion();
 
 	/** 
 	 * Called via input to turn at a given rate. 
@@ -77,6 +81,7 @@ protected:
 	void Reload();
 
 	float ControlPitch;
+	UPROPERTY(BlueprintReadWrite)
 	bool IsEquipWeapon = true;
 
 public: 

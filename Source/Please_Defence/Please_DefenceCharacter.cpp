@@ -184,13 +184,13 @@ void APlease_DefenceCharacter::MoveRight(float Value)
 	}
 }
 
-void APlease_DefenceCharacter::ToggleMode()
+void APlease_DefenceCharacter::ToggleMode_Implementation()
 {
 	if (IsEquipWeapon)
 	{
 		IsEquipWeapon = false;
 		weapon->Mesh->SetVisibility(false);
-		bUseControllerRotationYaw = false;
+		bUseControllerRotationYaw = false;	
 	}
 	else
 	{
@@ -205,6 +205,7 @@ void APlease_DefenceCharacter::Shoot()
 {
 	if (!IsEquipWeapon)
 	{
+		Construstion();
 		return;
 	}
 
