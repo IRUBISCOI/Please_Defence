@@ -52,6 +52,8 @@ public:
 	// BP¿¡¼­ call
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MonsterMove();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void MonsterStop();
 
 
 	UFUNCTION(BlueprintCallable)

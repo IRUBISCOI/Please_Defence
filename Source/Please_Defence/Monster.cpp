@@ -107,12 +107,13 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 	if (OtherActor == EndPoint)
 	{
 		Capsule->SetVisibility(false);
-		SkeletalMesh->SetVisibility(false);
+		SkeletalMesh->SetVisibility(true);
 
 		FVector Loc35 = MonPath->Spline->GetLocationAtSplinePoint(35, ESplineCoordinateSpace::World);
 
 		SetActorLocation(Loc35);
 
+		MonsterStop();
 		
 	}
 }
