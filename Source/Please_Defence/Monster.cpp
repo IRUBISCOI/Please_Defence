@@ -85,7 +85,6 @@ void AMonster::MoveToSpline(float Value)
 {
 	if (MonPath != nullptr)
 	{
-
 		float Loc = MonPath->Spline->GetSplineLength();
 		float lerp = UKismetMathLibrary::Lerp(0, Loc, Value);
 
@@ -110,6 +109,11 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 		Capsule->SetVisibility(false);
 		SkeletalMesh->SetVisibility(false);
 
+		FVector Loc35 = MonPath->Spline->GetLocationAtSplinePoint(35, ESplineCoordinateSpace::World);
+
+		SetActorLocation(Loc35);
+
+		
 	}
 }
 
