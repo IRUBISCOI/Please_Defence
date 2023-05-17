@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "Spawner.generated.h"
 
 
 class UStaticMeshComponent;
 class UArrowComponent;
+
 
 UCLASS()
 class PLEASE_DEFENCE_API ASpawner : public AActor
@@ -38,4 +40,26 @@ public:
 
 	float StartDelay_Cur = 0;
 	float StartDelay_Del = 1;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void SpawnerDispatcher();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class AMainGameState* mainState;
+
+	UPROPERTY(EditAnywhere)
+	AMonster* MonArr[4];
+
+	UPROPERTY(EditAnywhere)
+	AMonster* spawnMon;
+
+	UFUNCTION()
+		void AddArray();
+
+	UPROPERTY()
+		float CurSpawnCount = 0;
+
+	
+
+
 };

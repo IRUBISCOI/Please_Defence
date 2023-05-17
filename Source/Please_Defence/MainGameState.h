@@ -60,5 +60,18 @@ public:
 		float CurrentTime = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float DelayTime = 2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bSpawnTimeBoolean = false;
+	
+
+	UFUNCTION()
+		void UpdateCount();
+	UFUNCTION()
+		void StageUp();
+	UPROPERTY()
+		int StageCount = 0;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void StateDispatcher(float value1, float value2, float value3);
 
 };

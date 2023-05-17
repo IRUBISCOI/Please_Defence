@@ -5,9 +5,10 @@
 
 #include "Components/ArrowComponent.h"
 #include "Components/StaticMeshComponent.h"
-
+#include "MainGameState.h"
 #include "Monster.h"
 
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASpawner::ASpawner()
@@ -29,7 +30,11 @@ void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//AActor* state = UGameplayStatics::GetActorOfClass(GetWorld(), AMainGameState::StaticClass());
 
+	mainState = Cast<AMainGameState>(GetWorld()->GetGameState());
+
+	SpawnerDispatcher();
 
 }
 
@@ -42,9 +47,31 @@ void ASpawner::Tick(float DeltaTime)
 
 	if (StartDelay_Cur >= StartDelay_Del)
 	{
-		GetWorld()->SpawnActor<AMonster>(MonsterFactory, Arrow->GetRelativeLocation(), FRotator(0));
+		if (CurSpawnCount <= mainState->dt.MaxCount)
+		{
+			AddArray();
 
-		StartDelay_Cur = 0;
+			StartDelay_Cur = 0;
+		}
 	}
 }
+
+void ASpawner::AddArray()
+{
+	int count = 0;
+
+	if (count <= 99)
+	{
+		spawnMon = GetWorld()->SpawnActor<AMonster>(MonsterFactory, Arrow->GetRelativeLocation(), FRotator(0));
+
+		MonArr[count] = spawnMon;
+
+		CurSpawnCount += 1;
+
+		count += 1;
+	}
+
+}
+
+
 

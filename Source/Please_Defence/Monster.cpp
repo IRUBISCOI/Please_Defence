@@ -71,6 +71,8 @@ void AMonster::BeginPlay()
 
 	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMonster::OnCapsuleBeginOverlap);
 
+	MonsterDispatcher();
+
 }
 
 // Called every frame
@@ -94,16 +96,12 @@ void AMonster::MoveToSpline(float Value)
 		SetActorLocationAndRotation(SplineLoc, SplineRot);
 		SetActorScale3D(FVector(1));
 	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, TEXT("MonPath nullptr"));
-	}
+	
 }
 
 void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
 	if (OtherActor == EndPoint)
 	{
 		Capsule->SetVisibility(false);
