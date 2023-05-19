@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 
+#include "Containers/Array.h" 
+#include "queue"
+
 #include "Spawner.generated.h"
 
 
@@ -39,7 +42,7 @@ public:
 	TSubclassOf<class AMonster> MonsterFactory;
 
 	float StartDelay_Cur = 0;
-	float StartDelay_Del = 1;
+	float StartDelay_Del = 5;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void SpawnerDispatcher();
@@ -48,18 +51,27 @@ public:
 		class AMainGameState* mainState;
 
 	UPROPERTY(EditAnywhere)
-	AMonster* MonArr[4];
-
-	UPROPERTY(EditAnywhere)
 	AMonster* spawnMon;
 
-	UFUNCTION()
-		void AddArray();
+	UFUNCTION(BlueprintCallable)
+		void SetStart();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float CurSpawnCount = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int count = 0;
+
+	std::queue<AMonster*> mys;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool bSetPathLocation = false;
 
 	UPROPERTY()
-		float CurSpawnCount = 0;
-
+		float SpawnCount;
 	
+	FTimerHandle timerHandle;
 
+private:
+	void DelayTime();
 
 };
