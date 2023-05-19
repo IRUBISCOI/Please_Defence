@@ -39,6 +39,8 @@ public:
 	ACharacter* OwnChar;
 
 	int Ammo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Damage = 15;
 
 	void Shoot();
