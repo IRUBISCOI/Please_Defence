@@ -22,8 +22,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	int Gold = 0;
 
-	UFUNCTION(BlueprintCallable)
-	void Set_Weapon_Damage(int Damage);
 
 public:
 	class AWeapon* weapon;
@@ -32,6 +30,8 @@ public:
 
 	void Set_Weapon(AWeapon* New_weapon) { weapon = New_weapon; };
 
+	UFUNCTION(BlueprintCallable)
+	void Set_Weapon_Damage(int Damage);
 	UFUNCTION(BlueprintCallable)
 	int Get_Weapon_Damage();
 
