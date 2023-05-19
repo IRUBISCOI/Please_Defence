@@ -13,14 +13,14 @@
 // Sets default values
 ASpawner::ASpawner()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 	RootComponent = Arrow;
 	StartPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StartPoint"));
 	StartPoint->SetupAttachment(Arrow);
-	StartPoint->SetRelativeRotation(FRotator(0,-90,90));
+	StartPoint->SetRelativeRotation(FRotator(0, -90, 90));
 	StartPoint->SetRelativeScale3D(FVector(2));
 
 }
@@ -29,12 +29,13 @@ ASpawner::ASpawner()
 void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();
+
+	FTimerManager& timerManager = GetWorld()->GetTimerManager();
+	timerManager.SetTimer(timerHandle, this, &ASpawner::DelayTime, 0.1f, false);
+
 	
+
 	//AActor* state = UGameplayStatics::GetActorOfClass(GetWorld(), AMainGameState::StaticClass());
-
-	mainState = Cast<AMainGameState>(GetWorld()->GetGameState());
-
-	SpawnerDispatcher();
 
 }
 
@@ -47,31 +48,45 @@ void ASpawner::Tick(float DeltaTime)
 
 	if (StartDelay_Cur >= StartDelay_Del)
 	{
-		if (CurSpawnCount <= mainState->dt.MaxCount)
-		{
-			AddArray();
+		bSetPathLocation = true;
 
+		if (false)
+		{
 			StartDelay_Cur = 0;
 		}
 	}
 }
 
-void ASpawner::AddArray()
+void ASpawner::SetStart()
 {
-	int count = 0;
+	for (float i = 0; i <= SpawnCount; i++)
+	{
+		spawnMon = Cast<AMonster>(mys.front());
+		spawnMon->MonsterMove();
+		mys.pop();
+	}
 
-	if (count <= 99)
+
+}
+
+void ASpawner::DelayTime()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::White, TEXT("Spawner Beginplay"));
+
+	mainState = Cast<AMainGameState>(GetWorld()->GetGameState());
+
+	SpawnerDispatcher();
+
+	for (int i = 0; i <= count; i++)
 	{
 		spawnMon = GetWorld()->SpawnActor<AMonster>(MonsterFactory, Arrow->GetRelativeLocation(), FRotator(0));
 
-		MonArr[count] = spawnMon;
-
-		CurSpawnCount += 1;
-
-		count += 1;
+		mys.push(spawnMon);
 	}
 
 }
+
+
 
 
 
