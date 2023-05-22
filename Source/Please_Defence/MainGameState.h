@@ -78,6 +78,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void MisstionStart();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void WidgetVisible();
 
 	
 

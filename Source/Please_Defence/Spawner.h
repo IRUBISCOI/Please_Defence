@@ -8,6 +8,8 @@
 #include "Containers/Array.h" 
 #include "queue"
 
+#define MAXCOUNT 100;
+
 #include "Spawner.generated.h"
 
 
@@ -42,10 +44,11 @@ public:
 	TSubclassOf<class AMonster> MonsterFactory;
 
 	float StartDelay_Cur = 0;
-	float StartDelay_Del = 5;
+	float StartDelay_Del = 1;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void SpawnerDispatcher();
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class AMainGameState* mainState;
@@ -59,19 +62,26 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float CurSpawnCount = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int count = 0;
+	// Totalcount == 1000¸¶¸®
+	int Totalcount = MAXCOUNT;
 
 	std::queue<AMonster*> mys;
+	std::queue<AMonster*> moving;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bSetPathLocation = false;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 		float SpawnCount;
 	
+
 	FTimerHandle timerHandle;
+
+	UFUNCTION()
+		void TTTT();
 
 private:
 	void DelayTime();
+	
 
 };

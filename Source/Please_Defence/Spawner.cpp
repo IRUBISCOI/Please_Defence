@@ -44,29 +44,23 @@ void ASpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	StartDelay_Cur += DeltaTime;
+//	StartDelay_Cur += DeltaTime;
+//
+//	if (StartDelay_Cur >= StartDelay_Del)
+//	{
+//		TTTT();
+//
+//		StartDelay_Cur = 0;
+//	}
 
-	if (StartDelay_Cur >= StartDelay_Del)
-	{
-		bSetPathLocation = true;
-
-		if (false)
-		{
-			StartDelay_Cur = 0;
-		}
-	}
 }
 
 void ASpawner::SetStart()
 {
-	for (float i = 0; i <= SpawnCount; i++)
-	{
-		spawnMon = Cast<AMonster>(mys.front());
-		spawnMon->MonsterMove();
-		mys.pop();
-	}
+	bSetPathLocation = true;
 
-
+	FTimerManager& spawntimeManager = GetWorld()->GetTimerManager();
+	spawntimeManager.SetTimer(timerHandle, this, &ASpawner::TTTT, 1.0f, true);
 }
 
 void ASpawner::DelayTime()
@@ -77,13 +71,45 @@ void ASpawner::DelayTime()
 
 	SpawnerDispatcher();
 
-	for (int i = 0; i <= count; i++)
+	for (float i = 0; i <= Totalcount; i++)
 	{
+
 		spawnMon = GetWorld()->SpawnActor<AMonster>(MonsterFactory, Arrow->GetRelativeLocation(), FRotator(0));
 
-		mys.push(spawnMon);
+		if (spawnMon != nullptr)
+		{
+			mys.push(spawnMon);
+		}
 	}
+};
 
+void ASpawner::TTTT()
+{
+	FTimerManager& spawntimeManager = GetWorld()->GetTimerManager();
+
+	if (bSetPathLocation)
+	{
+		if (SpawnCount >= 0)
+		{
+			if (spawnMon != nullptr)
+			{
+				spawnMon = mys.front();
+				moving.push(spawnMon);
+				spawnMon->MonsterMove();
+				mys.pop();
+			}
+			SpawnCount -= 1;
+		}
+		if(moving.size() <= 0)
+		{
+			bSetPathLocation = false;
+			mainState->WidgetVisible();
+			mainState->StageUp();
+			spawntimeManager.ClearTimer(timerHandle);
+
+			
+		}
+	}
 }
 
 

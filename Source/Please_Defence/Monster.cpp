@@ -62,20 +62,34 @@ void AMonster::BeginPlay()
 
 	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, TEXT("Monster Beginplay"));
 
-	AActor* spline = UGameplayStatics::GetActorOfClass(GetWorld(), GetClass());
-	AActor* endpoint = UGameplayStatics::GetActorOfClass(GetWorld(), GetClass());
-	AActor* spawner = UGameplayStatics::GetActorOfClass(GetWorld(), GetClass());
+	AActor* spline = UGameplayStatics::GetActorOfClass(GetWorld(), AMonsterMovePath::StaticClass());
+	AActor* endpoint = UGameplayStatics::GetActorOfClass(GetWorld(), AEndPoint::StaticClass());
+	AActor* spawner = UGameplayStatics::GetActorOfClass(GetWorld(), ASpawner::StaticClass());
 
 	MonPath = Cast<AMonsterMovePath>(spline);
 	EndPoint = Cast<AEndPoint>(endpoint);
 	Spawner = Cast<ASpawner>(spawner);
-	
+
 	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMonster::OnCapsuleBeginOverlap);
 
 	MonsterDispatcher();
 
 	Capsule->SetVisibility(false);
 	SkeletalMesh->SetVisibility(true);
+
+	if (spline == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Magenta, FString::Printf(TEXT("spline Null")));
+	}
+	if (endpoint == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Magenta, FString::Printf(TEXT("endpoint Null")));
+	}
+	if (spawner == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Magenta, FString::Printf(TEXT("spawner Null")));
+	}
+
 
 }
 
@@ -84,26 +98,28 @@ void AMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	StartDelayTime += DeltaTime;
 	
 }
 
 void AMonster::MoveToSpline(float Value)
 {
-	if (MonPath != nullptr)
-	{
-		float Loc = MonPath->Spline->GetSplineLength();
-		float lerp = UKismetMathLibrary::Lerp(0, Loc, Value);
+		if (MonPath != nullptr)
+		{
+			float Loc = MonPath->Spline->GetSplineLength();
+			float lerp = UKismetMathLibrary::Lerp(0, Loc, Value);
 
-		SplineLoc = MonPath->Spline->GetLocationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
-		SplineRot = MonPath->Spline->GetRotationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
+			SplineLoc = MonPath->Spline->GetLocationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
+			SplineRot = MonPath->Spline->GetRotationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
 
-		SetActorLocationAndRotation(SplineLoc, SplineRot);
-		SetActorScale3D(FVector(1));
+			SetActorLocationAndRotation(SplineLoc, SplineRot);
+			SetActorScale3D(FVector(1));
 
-		Capsule->SetVisibility(true);
-		SkeletalMesh->SetVisibility(true);
-	}
-	
+			Capsule->SetVisibility(true);
+			SkeletalMesh->SetVisibility(true);
+
+			GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Blue, FString::Printf(TEXT("loc : %f"), Value));
+		}
 }
 
 void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
@@ -119,6 +135,9 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 		this->SetActorLocation(Loc35);
 
 		this->MonsterStop();
+
+		Spawner->moving.pop();
+		Spawner->mys.push(this);
 		
 	}
 }

@@ -24,13 +24,9 @@ void AMainGameState::BeginPlay()
 
 	if (Spawner != nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 50, FColor::Red, TEXT("Not Nullptr"));
 		Spawner->SpawnCount = MonsterCount;
 	}
 	
-
-	
-
 }
 
 // Called every frame
@@ -38,20 +34,11 @@ void AMainGameState::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	SpawnTimeCondition(DeltaTime);
 
 }
 
 void AMainGameState::SpawnTimeCondition(float value)
 {
-	CurrentTime += value;
-
-	if (CurrentTime >= DelayTime)
-	{
-		bSpawnTimeBoolean = false;
-		CurrentTime = 0;
-		
-	}
 
 }
 
@@ -68,6 +55,7 @@ void AMainGameState::UpdateCount()
 
 void AMainGameState::StageUp()
 {
+
 	dt.Stage += 1;
 	dt.MaxHP *= 1.25;
 	dt.MaxCount *= 1.25;
@@ -81,9 +69,11 @@ void AMainGameState::StageUp()
 	}
 
 	MonsterCount = dt.MaxCount;
+	Spawner->SpawnCount = dt.MaxCount;
 
 	StateDispatcher(dt.MaxHP, dt.MaxCount, dt.Speed);
 
+	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Blue, TEXT("Stage Up"));
 	
 }
 

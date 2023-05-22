@@ -53,6 +53,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MonsterMove();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void MoveMove();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MonsterStop();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MonsterDispatcher();
@@ -83,6 +85,8 @@ public:
 
 	FVector SplineLoc;
 	FRotator SplineRot;
+
+	float StartDelayTime = 0;
 
 		
 
