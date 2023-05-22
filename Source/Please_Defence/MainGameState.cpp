@@ -12,6 +12,7 @@ void AMainGameState::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Blue, TEXT("MainState Beginplay"));
 
 	LoadDT();
 
@@ -19,6 +20,16 @@ void AMainGameState::BeginPlay()
 
 	AActor* spawner = UGameplayStatics::GetActorOfClass(GetWorld(), ASpawner::StaticClass());
 
+	Spawner = Cast<ASpawner>(spawner);
+
+	if (Spawner != nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 50, FColor::Red, TEXT("Not Nullptr"));
+		Spawner->SpawnCount = MonsterCount;
+	}
+	
+
+	
 
 }
 
@@ -39,6 +50,7 @@ void AMainGameState::SpawnTimeCondition(float value)
 	{
 		bSpawnTimeBoolean = false;
 		CurrentTime = 0;
+		
 	}
 
 }
@@ -74,5 +86,7 @@ void AMainGameState::StageUp()
 
 	
 }
+
+
 
 

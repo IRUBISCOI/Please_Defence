@@ -4,6 +4,7 @@
 #include "Monster.h"
 #include "MonsterMovePath.h"
 #include "EndPoint.h"
+#include "Spawner.h"
 
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -49,7 +50,6 @@ AMonster::AMonster()
 //	BP_spline = LoadObject<UClass>(NULL, TEXT("Blueprint'/Game/_Dev/Monster_KHJ/BP_Spline.BP_Spline_C'"), NULL, LOAD_None, NULL);
 //	BP_endpoint = LoadObject<UClass>(NULL, TEXT("Blueprint'/Game/_Dev/Monster_KHJ/BP_EndPoint.BP_EndPoint_C'"), NULL, LOAD_None, NULL);
 
-
 	Capsule->SetCollisionObjectType(ECollisionChannel::ECC_OverlapAll_Deprecated);
 
 	
@@ -59,19 +59,23 @@ AMonster::AMonster()
 void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
-	//GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, TEXT(" Beginplay"));
 
-	AActor* spline = UGameplayStatics::GetActorOfClass(GetWorld(), AMonsterMovePath::StaticClass());
-	AActor* endpoint = UGameplayStatics::GetActorOfClass(GetWorld(), AEndPoint::StaticClass());
+	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, TEXT("Monster Beginplay"));
+
+	AActor* spline = UGameplayStatics::GetActorOfClass(GetWorld(), GetClass());
+	AActor* endpoint = UGameplayStatics::GetActorOfClass(GetWorld(), GetClass());
+	AActor* spawner = UGameplayStatics::GetActorOfClass(GetWorld(), GetClass());
 
 	MonPath = Cast<AMonsterMovePath>(spline);
 	EndPoint = Cast<AEndPoint>(endpoint);
-
-	MonsterMove();
-
+	Spawner = Cast<ASpawner>(spawner);
+	
 	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMonster::OnCapsuleBeginOverlap);
 
 	MonsterDispatcher();
+
+	Capsule->SetVisibility(false);
+	SkeletalMesh->SetVisibility(true);
 
 }
 
@@ -90,11 +94,14 @@ void AMonster::MoveToSpline(float Value)
 		float Loc = MonPath->Spline->GetSplineLength();
 		float lerp = UKismetMathLibrary::Lerp(0, Loc, Value);
 
-		FVector SplineLoc = MonPath->Spline->GetLocationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
-		FRotator SplineRot = MonPath->Spline->GetRotationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
+		SplineLoc = MonPath->Spline->GetLocationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
+		SplineRot = MonPath->Spline->GetRotationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
 
 		SetActorLocationAndRotation(SplineLoc, SplineRot);
 		SetActorScale3D(FVector(1));
+
+		Capsule->SetVisibility(true);
+		SkeletalMesh->SetVisibility(true);
 	}
 	
 }
@@ -109,9 +116,9 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 
 		FVector Loc35 = MonPath->Spline->GetLocationAtSplinePoint(35, ESplineCoordinateSpace::World);
 
-		SetActorLocation(Loc35);
+		this->SetActorLocation(Loc35);
 
-		MonsterStop();
+		this->MonsterStop();
 		
 	}
 }

@@ -55,7 +55,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MonsterStop();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		void MonsterDispatcher();
+	void MonsterDispatcher();
 
 
 	UFUNCTION(BlueprintCallable)
@@ -69,6 +69,9 @@ public:
 	UPROPERTY()
 	class AEndPoint* EndPoint;
 
+	UPROPERTY()
+		class ASpawner* Spawner;
+
 	UFUNCTION()
 	void OnCapsuleBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -77,6 +80,9 @@ public:
 		float MonsterCurHP = 100;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MonsterCurSpeed = 0.1;
+
+	FVector SplineLoc;
+	FRotator SplineRot;
 
 		
 

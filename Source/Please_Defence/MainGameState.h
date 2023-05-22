@@ -63,6 +63,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bSpawnTimeBoolean = false;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		ASpawner* Spawner;
 
 	UFUNCTION()
 		void UpdateCount();
@@ -73,5 +75,10 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void StateDispatcher(float value1, float value2, float value3);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void MisstionStart();
+
+	
 
 };
