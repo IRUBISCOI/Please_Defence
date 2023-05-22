@@ -11,7 +11,7 @@ ASummonTower::ASummonTower()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	StaticMeshCom = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	/*StaticMeshCom = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_StaticMeshComponent(TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube_Chamfer.1M_Cube_Chamfer'"));
 	BeforeSummonZone = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BeforeSummonZone"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_BeforeSummonZone(TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube_Chamfer.1M_Cube_Chamfer'"));
@@ -30,7 +30,7 @@ ASummonTower::ASummonTower()
 		Box->SetWorldScale3D(FVector(10,10,2.5));
 		BeforeSummonZone->SetRelativeLocation(FVector(0,0,100));
 
-	}
+	}*/
 
 }
 
@@ -38,7 +38,7 @@ ASummonTower::ASummonTower()
 void ASummonTower::BeginPlay()
 {
 	Super::BeginPlay();
-	BeforeSummonZone->SetVisibility(false);
+	//BeforeSummonZone->SetVisibility(false);
 	
 }
 
@@ -49,39 +49,39 @@ void ASummonTower::Tick(float DeltaTime)
 
 }
 
-void ASummonTower::Summon()
-{
-	if (BeforeSummonZone->IsVisible())
-	{
-		int RandomInteger = FMath::RandRange(0,3);
-
-		switch (RandomInteger)
-		{
-		case 0:
-			int SecondRandomInteger = FMath::RandRange(0 , 3);
-			UDataTable* DataTable = LoadObject<UDataTable>(nullptr , TEXT("DataTable'/Game/_Dev/Defencer_KHY/DataTable/DT_NormalTower.DT_NormalTower'"));
-			FName  RandomIntegerName = FName(*FString::FromInt(SecondRandomInteger));
-			NormalTower = DataTable->FindRow<ST_NormalTower>(RandomIntegerName , FString(""));
-			break;
-		case 1:
-			int SecondRandomInteger = FMath::RandRange(0 , 3);
-			UDataTable * DataTable = LoadObject<UDataTable>(nullptr , TEXT("DataTable'/Game/_Dev/Defencer_KHY/DataTable/DT_SkillTower.DT_SkillTower'"));
-			FName  RandomIntegerName = FName(*FString::FromInt(SecondRandomInteger));
-			SkillTower = DataTable->FindRow<ST_SkillTower>(RandomIntegerName , FString(""));
-
-			break;
-		case 2:
-			int SecondRandomInteger = FMath::RandRange(0 , 4);
-			UDataTable * DataTable = LoadObject<UDataTable>(nullptr , TEXT("DataTable'/Game/_Dev/Defencer_KHY/DataTable/DT_BuffTower.DT_BuffTower'"));
-			FName  RandomIntegerName = FName(*FString::FromInt(SecondRandomInteger));
-			BuffTower = DataTable->FindRow<ST_BuffTower>(RandomIntegerName , FString(""));
-			
-			break;
-			
-		default:
-			break;
-		}
-
-	}
-}
-
+//void ASummonTower::Summon()
+//{
+//	if (BeforeSummonZone->IsVisible())
+//	{
+//		int RandomInteger = FMath::RandRange(0,3);
+//
+//		switch (RandomInteger)
+//		{
+//		case 0:
+//			int SecondRandomInteger = FMath::RandRange(0 , 3);
+//			UDataTable* DataTable = LoadObject<UDataTable>(nullptr , TEXT("DataTable'/Game/_Dev/Defencer_KHY/DataTable/DT_NormalTower.DT_NormalTower'"));
+//			FName  RandomIntegerName = FName(*FString::FromInt(SecondRandomInteger));
+//			NormalTower = DataTable->FindRow<ST_NormalTower>(RandomIntegerName , FString(""));
+//			break;
+//		case 1:
+//			int SecondRandomInteger = FMath::RandRange(0 , 3);
+//			UDataTable * DataTable = LoadObject<UDataTable>(nullptr , TEXT("DataTable'/Game/_Dev/Defencer_KHY/DataTable/DT_SkillTower.DT_SkillTower'"));
+//			FName  RandomIntegerName = FName(*FString::FromInt(SecondRandomInteger));
+//			SkillTower = DataTable->FindRow<ST_SkillTower>(RandomIntegerName , FString(""));
+//
+//			break;
+//		case 2:
+//			int SecondRandomInteger = FMath::RandRange(0 , 4);
+//			UDataTable * DataTable = LoadObject<UDataTable>(nullptr , TEXT("DataTable'/Game/_Dev/Defencer_KHY/DataTable/DT_BuffTower.DT_BuffTower'"));
+//			FName  RandomIntegerName = FName(*FString::FromInt(SecondRandomInteger));
+//			BuffTower = DataTable->FindRow<ST_BuffTower>(RandomIntegerName , FString(""));
+//			
+//			break;
+//			
+//		default:
+//			break;
+//		}
+//
+//	}
+//}
+//
