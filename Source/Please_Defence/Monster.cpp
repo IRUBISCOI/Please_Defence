@@ -5,6 +5,8 @@
 #include "MonsterMovePath.h"
 #include "EndPoint.h"
 #include "Spawner.h"
+#include "MainGameState.h"
+#include "Please_DefenceCharacter.h"
 
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -47,11 +49,7 @@ AMonster::AMonster()
 		SkeletalMesh->SetAnimInstanceClass(WalkBase.Class);
 	}
 
-//	BP_spline = LoadObject<UClass>(NULL, TEXT("Blueprint'/Game/_Dev/Monster_KHJ/BP_Spline.BP_Spline_C'"), NULL, LOAD_None, NULL);
-//	BP_endpoint = LoadObject<UClass>(NULL, TEXT("Blueprint'/Game/_Dev/Monster_KHJ/BP_EndPoint.BP_EndPoint_C'"), NULL, LOAD_None, NULL);
-
 	Capsule->SetCollisionObjectType(ECollisionChannel::ECC_OverlapAll_Deprecated);
-
 	
 }
 
@@ -60,17 +58,29 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Red, TEXT("Monster Beginplay"));
-
 	AActor* spline = UGameplayStatics::GetActorOfClass(GetWorld(), AMonsterMovePath::StaticClass());
 	AActor* endpoint = UGameplayStatics::GetActorOfClass(GetWorld(), AEndPoint::StaticClass());
+	AActor* mainstate = UGameplayStatics::GetActorOfClass(GetWorld(), AMainGameState::StaticClass());
 	AActor* spawner = UGameplayStatics::GetActorOfClass(GetWorld(), ASpawner::StaticClass());
+
+	AActor* spawnerA = UGameplayStatics::GetActorOfClass(GetWorld(), TypeA);
+	AActor* spawnerB = UGameplayStatics::GetActorOfClass(GetWorld(), TypeB);
+	AActor* spawnerC = UGameplayStatics::GetActorOfClass(GetWorld(), TypeC);
+
 
 	MonPath = Cast<AMonsterMovePath>(spline);
 	EndPoint = Cast<AEndPoint>(endpoint);
+	MainState = Cast<AMainGameState>(mainstate);
 	Spawner = Cast<ASpawner>(spawner);
 
+	SpawnerA = Cast<ASpawner>(spawnerA);
+	SpawnerB = Cast<ASpawner>(spawnerB);
+	SpawnerC = Cast<ASpawner>(spawnerC);
+
 	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMonster::OnCapsuleBeginOverlap);
+
+	MonCurStageHP = MainState->dt.MaxHP;
+	MonCurStageSpeed = MainState->dt.Speed;
 
 	MonsterDispatcher();
 
@@ -79,18 +89,13 @@ void AMonster::BeginPlay()
 
 	if (spline == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Magenta, FString::Printf(TEXT("spline Null")));
 	}
 	if (endpoint == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Magenta, FString::Printf(TEXT("endpoint Null")));
 	}
 	if (spawner == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15, FColor::Magenta, FString::Printf(TEXT("spawner Null")));
 	}
-
-
 }
 
 // Called every frame
@@ -98,28 +103,25 @@ void AMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	StartDelayTime += DeltaTime;
 	
 }
 
 void AMonster::MoveToSpline(float Value)
 {
-		if (MonPath != nullptr)
-		{
-			float Loc = MonPath->Spline->GetSplineLength();
-			float lerp = UKismetMathLibrary::Lerp(0, Loc, Value);
+	if (MonPath != nullptr)
+	{
+		Capsule->SetVisibility(true);
+		SkeletalMesh->SetVisibility(true);
 
-			SplineLoc = MonPath->Spline->GetLocationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
-			SplineRot = MonPath->Spline->GetRotationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
+		float Loc = MonPath->Spline->GetSplineLength();
+		float lerp = UKismetMathLibrary::Lerp(0, Loc, Value);
 
-			SetActorLocationAndRotation(SplineLoc, SplineRot);
-			SetActorScale3D(FVector(1));
-
-			Capsule->SetVisibility(true);
-			SkeletalMesh->SetVisibility(true);
-
-			GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Blue, FString::Printf(TEXT("loc : %f"), Value));
-		}
+		SplineLoc = MonPath->Spline->GetLocationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
+		SplineRot = MonPath->Spline->GetRotationAtDistanceAlongSpline(lerp, ESplineCoordinateSpace::World);
+		
+		SetActorLocationAndRotation(SplineLoc, SplineRot);
+		SetActorScale3D(FVector(1));
+	}
 }
 
 void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
@@ -136,11 +138,33 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 
 		this->MonsterStop();
 
-		Spawner->moving.pop();
-		Spawner->mys.push(this);
-		
+		MainState->RemovetoMyList(this);
 	}
 }
+
+void AMonster::Damage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange,
+		FString::Printf(TEXT("TakeDamage Damage = %f EventInstigator = %s"), DamageAmount, *EventInstigator->GetName()));
+
+	APlease_DefenceCharacter* Player = Cast<APlease_DefenceCharacter>(EventInstigator);
+
+	if (Player)
+	{
+		SufferDamage(DamageAmount, EventInstigator);
+	}
+}
+
+void AMonster::SufferDamage(float damage, AController* EventInstigator)
+{
+	MonCurStageHP -= damage;
+
+	if (MonCurStageHP <= 0)
+	{
+		Gain_Gold(EventInstigator);
+	}
+}
+
 
 
 
