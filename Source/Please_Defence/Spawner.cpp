@@ -32,27 +32,15 @@ void ASpawner::BeginPlay()
 
 	FTimerManager& timerManager = GetWorld()->GetTimerManager();
 	timerManager.SetTimer(timerHandle, this, &ASpawner::DelayTime, 0.1f, false);
-
 	
-
 	//AActor* state = UGameplayStatics::GetActorOfClass(GetWorld(), AMainGameState::StaticClass());
-
 }
 
 // Called every frame
 void ASpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-//	StartDelay_Cur += DeltaTime;
-//
-//	if (StartDelay_Cur >= StartDelay_Del)
-//	{
-//		TTTT();
-//
-//		StartDelay_Cur = 0;
-//	}
-
+	
 }
 
 void ASpawner::SetStart()
@@ -65,9 +53,9 @@ void ASpawner::SetStart()
 
 void ASpawner::DelayTime()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15, FColor::White, TEXT("Spawner Beginplay"));
-
 	mainState = Cast<AMainGameState>(GetWorld()->GetGameState());
+
+	//GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Green, FString::Printf(TEXT("Spanwer : %s , SpawnCount : %f"), *this->GetName(), SetCount.SpawnCount));
 
 	SpawnerDispatcher();
 
@@ -89,25 +77,24 @@ void ASpawner::TTTT()
 
 	if (bSetPathLocation)
 	{
-		if (SpawnCount >= 0)
+		if (SetCount.SpawnCount >= 0)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Red, FString::Printf(TEXT("SpawnCount : %f"), SetCount.SpawnCount));
 			if (spawnMon != nullptr)
 			{
 				spawnMon = mys.front();
-				moving.push(spawnMon);
+				mainState->MyList.push_back(spawnMon);
 				spawnMon->MonsterMove();
 				mys.pop();
 			}
-			SpawnCount -= 1;
+			else
+			{
+			}
+			SetCount.SpawnCount -= 1;
 		}
-		if(moving.size() <= 0)
+		else
 		{
-			bSetPathLocation = false;
-			mainState->WidgetVisible();
-			mainState->StageUp();
 			spawntimeManager.ClearTimer(timerHandle);
-
-			
 		}
 	}
 }

@@ -12,6 +12,14 @@
 
 #include "Spawner.generated.h"
 
+USTRUCT(Atomic, BlueprintType)
+struct FTypeCount
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float SpawnCount;
+};
 
 class UStaticMeshComponent;
 class UArrowComponent;
@@ -40,7 +48,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UArrowComponent* Arrow;
 
-	UPROPERTY(EditAnywhere, Category = SpawnSettings)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class AMonster> MonsterFactory;
 
 	float StartDelay_Cur = 0;
@@ -49,8 +57,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void SpawnerDispatcher();
 	
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 		class AMainGameState* mainState;
 
 	UPROPERTY(EditAnywhere)
@@ -59,26 +66,27 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetStart();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		float CurSpawnCount = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	// Totalcount == 1000¸¶¸®
 	int Totalcount = MAXCOUNT;
 
 	std::queue<AMonster*> mys;
 	std::queue<AMonster*> moving;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly)
 	bool bSetPathLocation = false;
-
-	UPROPERTY(EditAnywhere)
-		float SpawnCount;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FTypeCount SetCount;
 	
 
 	FTimerHandle timerHandle;
 
 	UFUNCTION()
 		void TTTT();
+
+	
 
 private:
 	void DelayTime();
