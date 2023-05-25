@@ -8,6 +8,7 @@
 #include "DrawDebugHelpers.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Gold_Pocket.h"
+#include "Monster.h"
 
 
 // Sets default values
@@ -104,7 +105,7 @@ void AWeapon::Shoot()
 				UGameplayStatics::ApplyDamage(HitObject, Damage, OwnChar->GetController(), this, UDamageType::StaticClass());
 			}
 
-			ACharacter* HitMonster = Cast<ACharacter>(result.GetActor());
+			AMonster* HitMonster = Cast<AMonster>(result.GetActor());
 			if (HitMonster)
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Monster")));
