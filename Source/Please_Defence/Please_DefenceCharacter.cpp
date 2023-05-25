@@ -18,7 +18,6 @@ void APlease_DefenceCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//SpawnActor;
 	weapon = GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass(), GetActorTransform());
 
 	weapon->AttachToComponent(this->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("weapon"));
@@ -73,19 +72,21 @@ APlease_DefenceCharacter::APlease_DefenceCharacter()
 
 	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Shoot(TEXT("AnimMontage'/Game/RifleAnimsetPro/Animations/RifleAnimSet/Rifle_ShootOnce_Montage.Rifle_ShootOnce_Montage'"));
 	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Reload(TEXT("AnimMontage'/Game/RifleAnimsetPro/Animations/RifleAnimSet/Rifle_Reload_2_Montage.Rifle_Reload_2_Montage'"));
-
+	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Construct(TEXT("AnimMontage'/Game/RifleAnimsetPro/Animations/RifleAnimSet/A_2handHighCast_Montage.A_2handHighCast_Montage'"));
+	
 	AnimMontage_Shoot = montage_Shoot.Object;
 	AnimMontage_Reload = montage_Reload.Object;
+	AnimMontage_Construct = montage_Construct.Object;
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+	//static ConstructorHelpers::FObjectFinder<UBlueprint> BPObject(TEXT("Blueprint'/Game/_Dev/Character_CSH/Character/BP_Weapon.BP_Weapon'")); // PATH is blueprint object path
+	//
+	//if (BPObject.Object != NULL)
+	//{
+	//	BP_Weapon = (UClass*)BPObject.Object->GeneratedClass;
+	//}
+
 }
-
-void APlease_DefenceCharacter::OnNotifyReload()
-{
-
-}
-
-
 
 //////////////////////////////////////////////////////////////////////////
 // Input

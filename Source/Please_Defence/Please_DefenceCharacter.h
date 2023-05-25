@@ -34,13 +34,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-	UFUNCTION(BlueprintCallable)
-	void OnNotifyReload();
-
 	class AWeapon* weapon;
 	class APlease_Defence_PlayerState* playerState;
 	UAnimMontage* AnimMontage_Shoot;
 	UAnimMontage* AnimMontage_Reload;
+	UAnimMontage* AnimMontage_Construct;
 
 protected:
 
