@@ -34,14 +34,14 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
-void USkillComponent::SettingSkill_Implementation(float BeforeRange , float BeforeDamage , float BeforeDelay , float BeforeDistance , UParticleSystem* BeforePaticle , FVector BeforeLocation, AActor* BeforeAActor)
+void USkillComponent::SettingSkill_Implementation(float BeforeRange , float BeforeDamage , float BeforeDelay , float BeforeDistance , UParticleSystem* BeforePaticle , FVector BeforeLocation)
 {
 	Range= BeforeRange;
 	Distance=BeforeDistance;
 	Particle=BeforePaticle;
 	Damage=BeforeDamage;
 	Delay=BeforeDelay;
-	Target=BeforeAActor;
+	//Target=BeforeAActor;
 }
 
 void USkillComponent::ActiveSkill_Implementation()
@@ -52,10 +52,22 @@ void USkillComponent::ActiveSkill_Implementation()
 		if (Particle!=nullptr)
 		{
 			FTimerManager& TimerManager = GWorld->GetTimerManager();
-			SettingEmitter = UGameplayStatics::SpawnEmitterAtLocation(GetWorld() , Particle , Location , FRotator::ZeroRotator , FVector(1.f , 1.f , 1.f),true, EPSCPoolMethod::None, true);
+			if (IsValid(SettingEmitter))
+			{
+				SettingEmitter->SetWorldLocation(Location);
+				SettingEmitter->Activate(true);
+			}
+			else
+			{
+
+				SettingEmitter = UGameplayStatics::SpawnEmitterAtLocation(GetWorld() , Particle , Location , FRotator::ZeroRotator , FVector(1.f , 1.f , 1.f) , true , EPSCPoolMethod::None , true);
+			}
 			UGameplayStatics::ApplyDamage(Target , Damage, nullptr , nullptr , UDamageType::StaticClass());
-			TimerManager.SetTimer(TimerHandle ,this,&USkillComponent::ClearEmitter ,Delay-0.1f ,false );
-			
+			TimerManager.SetTimer(TimerHandle ,this,&USkillComponent::ClearEmitter_Implementation ,Delay-0.1f ,false );
+			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("SpawnEmitter")));
+			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Emitter:%s"), *(SettingEmitter->GetName())));
+
+
 		}
 		
 	}
@@ -65,12 +77,15 @@ void USkillComponent::ActiveSkill_Implementation()
 
 void USkillComponent::ClearEmitter_Implementation()
 {
-	
 	FTimerManager& TimerManager = GWorld->GetTimerManager();
-	TimerManager.ClearTimer(TimerHandle);
-	//DestroyComponent(SettingEmitter);
-		
-	
+	if (IsValid(SettingEmitter))
+	{ 
+		//SettingEmitter->DestroyComponent();
+		//SettingEmitter=nullptr;
+		SettingEmitter->SetActive(false);
+		TimerManager.ClearTimer(TimerHandle);
+		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("ClearEmitter") ));
+	}
 }
 
 void USkillComponent::SetTarget_Implementation(AActor* BeforeTarget)

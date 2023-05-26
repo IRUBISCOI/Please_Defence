@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Math/UnrealMath.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "SkillComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom),Blueprintable, meta=(BlueprintSpawnableComponent) )
 class PLEASE_DEFENCE_API USkillComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -26,29 +27,29 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-		UParticleSystem* Particle;
+	UParticleSystem* Particle;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-		UParticleSystemComponent* SettingEmitter;
+	UParticleSystemComponent* SettingEmitter;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-		float Distance;
+	float Distance;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-		float Range;
+	float Range;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-		float Damage;
+	float Damage;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-		float Delay;
+	float Delay;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-		FVector Location;
+	FVector Location;
 
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-		AActor* Target;
+	AActor* Target;
 		
 
 	FTimerHandle TimerHandle;
@@ -61,7 +62,7 @@ public:
 		void ActiveSkill();
 
 	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
-		void SettingSkill(float BeforeRange , float BeforeDamage, float BeforeDelay, float BeforeDistance, UParticleSystem* BeforePaticle,FVector BeforeLocation, AActor* BeforeAActor);
+		void SettingSkill(float BeforeRange , float BeforeDamage, float BeforeDelay, float BeforeDistance, UParticleSystem* BeforePaticle,FVector BeforeLocation);
 
 	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
 		void ClearEmitter();
