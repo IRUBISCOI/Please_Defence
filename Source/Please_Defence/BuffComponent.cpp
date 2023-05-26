@@ -45,15 +45,17 @@ void UBuffComponent::Buff_Implementation()
 	if (Ps)
 	{
 		float DefaultDamage= Ps->Get_Weapon_Damage();
-		//Ps->Set_Weapon_Damage(DefaultDamage + Damage);
+		Ps->Set_Weapon_Damage(DefaultDamage + Damage);
+		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("DefaultDamage = %f") , DefaultDamage));
+		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("DefaultDamage + Damage = %f") , DefaultDamage + Damage));
 	}
 }
 
 void UBuffComponent::SettingBuff_Implementation(float BeforeDamage , float BeforeDelay , UParticleSystem* BeforeParticle , FVector BeforeLocation)
 {
-	Particle=BeforeParticle;
 	Damage=BeforeDamage;
 	Delay=BeforeDelay;
+	Particle=BeforeParticle;
 	Location=BeforeLocation;
 }
 

@@ -7,7 +7,7 @@
 #include "BuffComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), Blueprintable ,meta=(BlueprintSpawnableComponent) )
 class PLEASE_DEFENCE_API UBuffComponent : public UActorComponent
 {
 	GENERATED_BODY()

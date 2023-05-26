@@ -7,11 +7,18 @@
 #include "Components/BoxComponent.h"
 #include "BuffComponent.h"
 #include "SkillComponent.h"
+#include "ST_NormalTower.h"
+#include "ST_SKillTower.h"
+#include "ST_BuffTower.h"
 #include "Monster.h"
+#include "ST_SKillTower.h"
+#include "Misc/OutputDeviceNull.h"
+#include "Components/CapsuleComponent.h"
 #include "SummonTower.generated.h"
 
 
-//UStruct ST_NormalTower;
+
+class BP_Missile;
 
 UCLASS()
 class PLEASE_DEFENCE_API ASummonTower : public AActor
@@ -30,58 +37,116 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	UStaticMeshComponent* StaticMeshCom;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	UStaticMeshComponent* BeforeSummonZone;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	UStaticMeshComponent* Tower;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	UBoxComponent* Box;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	FName tag;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	float FiestDistance;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	AMonster* Target;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	int MyType ;
-//
-//	//UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	//TArray<class BP_Missile*>MissileArray;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	UStruct ST_NormalTower * DT_NormalTower ;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	int ArrayNum;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	TArray<AActor*>OverlappintActors;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	TArray<class BP_Monster*>MonsterArray;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	class ST_NormalTower* NormalTower;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	class ST_SkillTower* SkillTower;
-//
-//	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-//	class ST_BuffTower* BuffTower;
-//
-//	
-//public:
-//	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
-//	void Summon();
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	UStaticMeshComponent* StaticMeshCom;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	UStaticMeshComponent* BeforeSummonZone;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	UStaticMeshComponent* Tower;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	UBoxComponent* Box;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	FName tag;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	float FirstDistance;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	AMonster* Target;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	TArray<AMonster*>TargetArr;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	int MyType ;
+
+
+
+	FTimerHandle TimerHandle;
+
 	
+
+	UPROPERTY(EditAnywhere , Category = "Blueprint")
+	AActor* Missile;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	TArray <AActor*> MissileArray;
+
+
+	
+	
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	FST_NormalTower DT_NormalTower ;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	int ArrayNum;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	TArray<AActor*>OverlappintActors;
+
+	//UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	//TArray<class BP_Monster*>MonsterArray;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	FST_NormalTower NormalTower;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	FST_SKillTower SkillTower;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	FST_BuffTower BuffTower;
+
+public:
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	class UBuffComponent* BuffCom;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	class USkillComponent* SkillCom; 
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	UActorComponent* SkillActorCom;
+
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	UActorComponent* BuffActorCom;
+
+	
+	
+public:
+	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
+	void Summon();
+
+	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
+	void ExSetAttackArray();
+
+	UFUNCTION()
+	void Call_MissileArrayReset();
+	//블루 프린트에서 만든 함수 콜
+	
+	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
+	void ExAttack();
+
+
+	UFUNCTION()
+	void Call_SetNormalTarget();
+
+
+	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
+	void SelectTower();
+
+	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
+	void ExSettingTarget();
+
+
+	UFUNCTION()
+	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex);
+
 
 };
