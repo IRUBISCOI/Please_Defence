@@ -15,11 +15,10 @@ class PLEASE_DEFENCE_API APlease_Defence_PlayerState : public APlayerState
 	GENERATED_BODY()
 
 
-protected:
+private:
 
 	int Weapon_Damage = 15;
 
-	UPROPERTY(BlueprintReadWrite)
 	int Gold = 0;
 
 
@@ -30,15 +29,15 @@ public:
 
 	void Set_Weapon(AWeapon* New_weapon) { weapon = New_weapon; };
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Set_Weapon_Damage(int Damage);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int Get_Weapon_Damage();
 
-	UFUNCTION(BlueprintCallable)
-	void Set_Gold(int newGold) { Gold += newGold; };
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Set_Gold(int newGold);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int Get_Gold() { return Gold; };
 
 	UFUNCTION(BlueprintImplementableEvent)

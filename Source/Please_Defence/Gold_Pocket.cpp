@@ -5,6 +5,7 @@
 #include "Please_DefenceCharacter.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Please_Defence_PlayerState.h"
 
 // Sets default values
 AGold_Pocket::AGold_Pocket()
@@ -20,6 +21,24 @@ void AGold_Pocket::BeginPlay()
 	Super::BeginPlay();
 	
 }
+/**/
+void AGold_Pocket::Gain_Gold_Implementation(AController* target)
+{
+	APlease_Defence_PlayerState* ps = Cast<APlease_Defence_PlayerState>(target->GetPawn()->GetPlayerState());
+
+	if (ps)
+	{
+		if (Owning_Gold)
+		{
+			ps->Set_Gold(ps->Get_Gold() + Owning_Gold);
+		}
+		else
+		{
+			ps->Set_Weapon_Damage(ps->Get_Weapon_Damage() + 1);
+		}
+	}
+}
+
 /*
 void AGold_Pocket::Gain_Gold_Implementation(APlease_DefenceCharacter* target)
 {
