@@ -24,31 +24,31 @@ ASummonTower::ASummonTower()
 
 	Tower = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tower"));
 	Box = CreateDefaultSubobject< UBoxComponent>(TEXT("Box"));
-	if (SM_StaticMeshComponent.Succeeded() && SM_BeforeSummonZone.Succeeded())
+	
+	if (SM_StaticMeshComponent.Succeeded() || SM_BeforeSummonZone.Succeeded())
 	{
 		StaticMeshCom->SetStaticMesh(SM_StaticMeshComponent.Object);
 		BeforeSummonZone->SetStaticMesh(SM_BeforeSummonZone.Object);
 		Tower->SetCollisionProfileName(FName(TEXT("NoCollision")));
 
 		BeforeSummonZone->SetCollisionProfileName(FName(TEXT("NoCollision")));
-		Box->AttachToComponent(StaticMeshCom , FAttachmentTransformRules::KeepWorldTransform);
-		Box->SetCollisionProfileName(FName(TEXT("OverlapAll")));
-		BeforeSummonZone->GetRelativeLocation();
 		BeforeSummonZone->AttachToComponent(StaticMeshCom , FAttachmentTransformRules::KeepRelativeTransform);
 		BeforeSummonZone->SetRelativeLocation(FVector(GetActorLocation().X , GetActorLocation().Y , GetActorLocation().Z + 100));
 		Tower->AttachToComponent(BeforeSummonZone , FAttachmentTransformRules::KeepWorldTransform);
-		Box->SetRelativeLocation(FVector(0,0,0));
+		Box->AttachToComponent(StaticMeshCom , FAttachmentTransformRules::KeepWorldTransform);
+		Box->SetCollisionProfileName(FName(TEXT("OverlapAll")));
 		
-		Box->SetRelativeScale3D(FVector(BeforeSummonZone->GetRelativeScale3D().X*10 , BeforeSummonZone->GetRelativeScale3D().Y*10 , BeforeSummonZone->GetRelativeScale3D().Z*2.5));
 		Tower->SetRelativeLocation(FVector(0,0,0));
 		Tower->SetWorldScale3D(FVector(0.5 , 0.5 , 0.5));
 		BeforeSummonZone->SetMaterial(0 , M_BeforeSummonZone.Object);
 	}
+	Box->SetRelativeLocation(FVector(0,0,0));
+	Box->SetWorldScale3D(FVector(10 ,10 ,2.5f));
 	SkillCom=CreateDefaultSubobject<USkillComponent>(TEXT("SkillCom"));
 	BuffCom =CreateDefaultSubobject<UBuffComponent>(TEXT("BuffCom"));
 
-	//Box->OnComponentBeginOverlap.AddDynamic(this , &ASummonTower::OnComponentBeginOverlap);
-	//Box->OnComponentEndOverlap.AddDynamic(this , &ASummonTower::OnComponentEndOverlap);
+	Box->OnComponentBeginOverlap.AddDynamic(this , &ASummonTower::OnOverlapBegin);
+	Box->OnComponentEndOverlap.AddDynamic(this , &ASummonTower::OnOverlapEnd);
 
 	//static ConstructorHelpers::FClassFinder<UBuffComponent>ExBuffCom(TEXT("Class'/Script/Please_Defence.BuffComponent'"));
 	//static ConstructorHelpers::FClassFinder<USkillComponent>ExSkillCom(TEXT("Class'/Script/Please_Defence.SkillComponent'S"));
@@ -93,11 +93,11 @@ void ASummonTower::Call_SetNormalTarget()
 	CallFunctionByNameWithArguments(TEXT("SetNormalTarget") , Ar , nullptr , true);
 }
 
-void ASummonTower::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult)
+void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult)
 {
-	
-	
-		/*if (MyType == 0 || MyType == 1)
+	if (OtherActor->ActorHasTag("Monster"))
+	{ 
+		if (MyType == 0 || MyType == 1)
 		{
 			AMonster* OverlapMon= Cast<AMonster>(OtherActor);
 			if (OverlapMon->Capsule == Cast <UCapsuleComponent> (OtherComp))
@@ -110,6 +110,7 @@ void ASummonTower::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp ,
 				else
 				{
 					Target= OverlapMon;
+					GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("OnOverlapBegin and TargetOn")));
 
 					switch (MyType)
 					{
@@ -117,6 +118,8 @@ void ASummonTower::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp ,
 						{
 						Call_SetNormalTarget();
 						FTimerManager& TimerManager = GWorld->GetTimerManager();
+						//FName ArrayName="Die"; 
+						//ArrayName = OtherActor->Tags[0];
 						TimerManager.SetTimer(TimerHandle , this , &ASummonTower::ExAttack , 0.5f , true);
 						}
 						break;
@@ -125,6 +128,8 @@ void ASummonTower::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp ,
 						SkillCom->SetTarget(Target);
 						SkillCom->ClearEmitter();
 						SkillCom->ActiveSkill();
+						//FName ArrayName = "Die";
+						//ArrayName = OtherActor->Tags[0];
 						FTimerManager& TimerManager = GWorld->GetTimerManager();
 						TimerManager.SetTimer(TimerHandle , SkillCom , &USkillComponent::ActiveSkill, SkillCom ->Delay, true);
 						}
@@ -132,67 +137,70 @@ void ASummonTower::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp ,
 					}
 				}
 			}
-		}*/
-	
+		}
+	}
 }
 
-void ASummonTower::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex)
+void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex)
 {
-	
-		/*if (MyType == 0 || MyType == 1)
+		if (MyType == 0 || MyType == 1)
 		{
-			AMonster* OverlapMon = Cast<AMonster>(OtherActor);
-			if (OverlapMon->Capsule == Cast <UCapsuleComponent>(OtherComp))
+			if (AMonster* OverlapMon = Cast<AMonster>(OtherActor))
 			{
 
-				if (TargetArr.Remove(OverlapMon))
-				{
-					for ( AMonster* var : TargetArr)
-					{
-						if (FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation()) < FirstDistance)
-						{
-							FirstDistance= FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation());
-							Target= var;
-						}
-					}
-					ExSettingTarget();
-				}
-				else
-				{
-					FirstDistance=15000.0f;
-					Target=nullptr;
-					switch (MyType)
-					{
-
-					case 0:
-					{
-						Call_SetNormalTarget();
-						FTimerManager& TimerManager = GWorld->GetTimerManager();
-						TimerManager.ClearTimer(TimerHandle);
-
-					}
-					break;
-					case 1:
-					{
-						SkillCom->SetTarget(Target);
-						FTimerManager& TimerManager = GWorld->GetTimerManager();
-						TimerManager.ClearTimer(TimerHandle);
-					}
-					break;
-
-
-					default:
-						break;
-					}
-
-				}
 			
+				if (OverlapMon->Capsule->IsVisible())
+				{
+					GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("OnOverlapEnd")));
+
+					if (TargetArr.Remove(OverlapMon))
+					{
+						for ( AMonster* var : TargetArr)
+						{
+							if (FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation()) < FirstDistance)
+							{
+								FirstDistance= FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation());
+								Target= var;
+							}
+						}
+						ExSettingTarget();
+					}
+					else
+					{
+						FirstDistance=15000.0f;
+						Target=nullptr;
+						switch (MyType)
+						{
+
+						case 0:
+						{
+							Call_SetNormalTarget();
+							FTimerManager& TimerManager = GWorld->GetTimerManager();
+							TimerManager.ClearTimer(TimerHandle);
+
+						}
+						break;
+						case 1:
+						{
+							SkillCom->SetTarget(Target);
+							FTimerManager& TimerManager = GWorld->GetTimerManager();
+							TimerManager.ClearTimer(TimerHandle);
+						}
+						break;
+
+
+						default:
+							break;
+						}
+
+					}
+				
+				}
+
+
 			}
-
-
-
 		}
-	*/
+	
 
 
 
@@ -204,6 +212,7 @@ void ASummonTower::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComp , A
 
 void ASummonTower::ExAttack_Implementation()
 {
+	GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta, FString::Printf(TEXT("Attack")));
 	if (IsValid(Target))
 	{
 		if (Target->MonCurStageHP > 0)
@@ -276,7 +285,7 @@ void ASummonTower::Summon_Implementation()
 						NormalTower.Delay= ExNormalTower->Delay;
 						//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Damage:%f") , NormalTower.Damage));
 						Tags[0] = "MakeTower";
-						ExSetAttackArray();
+						
 						SelectTower();
 					}
 				}
