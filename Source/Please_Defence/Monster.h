@@ -13,6 +13,7 @@ class UCapsuleComponent;
 class USkeletalMeshComponent;
 class USceneComponent;
 class UWidgetComponent;
+class UAnimMontage;
 
 
 UCLASS()
@@ -37,7 +38,7 @@ public:
 	// Base Component
 	UPROPERTY(EditAnywhere)
 	USceneComponent* RootComp;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* Capsule;
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* SkeletalMesh;
@@ -55,6 +56,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MonsterDispatcher();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* AnimMontage;
 
 	UFUNCTION(BlueprintCallable)
 		void MoveToSpline(float Value);
