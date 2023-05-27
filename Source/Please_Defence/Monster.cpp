@@ -19,6 +19,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Animation/AnimInstance.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
+#include "Animation/AnimInstance.h"
 
 
 // Sets default values
@@ -38,21 +40,6 @@ AMonster::AMonster()
 	Widget_Front->SetupAttachment(SkeletalMesh);
 	Widget_Back = CreateDefaultSubobject<UWidgetComponent>(TEXT("HP_Back"));
 	Widget_Back->SetupAttachment(SkeletalMesh);
-
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SKeletalBase
-	(TEXT("SkeletalMesh'/Game/_Dev/Monster_KHJ/Animation/Standing_Walk_Forward.Standing_Walk_Forward'"));
-	if (SKeletalBase.Succeeded())
-	{
-		SkeletalMesh->SetSkeletalMesh(SKeletalBase.Object);
-		SkeletalMesh->SetRelativeLocationAndRotation(FVector(0, 0, -40), FRotator(0, 90, 0));
-		SkeletalMesh->SetRelativeScale3D(FVector(0.5f));
-	}
-	static ConstructorHelpers::FClassFinder<UAnimInstance>WalkBase
-	(TEXT("AnimBlueprint'/Game/_Dev/Monster_KHJ/Animation/WalkBase.WalkBase_C'"));
-	if (WalkBase.Succeeded())
-	{
-		SkeletalMesh->SetAnimInstanceClass(WalkBase.Class);
-	}
 
 	Capsule->SetCollisionObjectType(ECollisionChannel::ECC_OverlapAll_Deprecated);
 
@@ -99,7 +86,9 @@ void AMonster::BeginPlay()
 	MonTypeCurHP = MonTypeHP;
 
 	Capsule->SetVisibility(false);
-	SkeletalMesh->SetVisibility(true);
+	SkeletalMesh->SetVisibility(false);
+	Widget_Front->SetVisibility(false);
+	Widget_Back->SetVisibility(false);
 
 	if (spline == nullptr)
 	{
@@ -126,6 +115,8 @@ void AMonster::MoveToSpline(float Value)
 	{
 		Capsule->SetVisibility(true);
 		SkeletalMesh->SetVisibility(true);
+		Widget_Front->SetVisibility(true);
+		Widget_Back->SetVisibility(true);
 
 		float Loc = MonPath->Spline->GetSplineLength();
 		float lerp = UKismetMathLibrary::Lerp(0, Loc, Value);
@@ -144,7 +135,9 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 	if (OtherActor == EndPoint)
 	{
 		Capsule->SetVisibility(false);
-		SkeletalMesh->SetVisibility(true);
+		SkeletalMesh->SetVisibility(false);
+		Widget_Front->SetVisibility(false);
+		Widget_Back->SetVisibility(false);
 
 		FVector Loc35 = MonPath->Spline->GetLocationAtSplinePoint(35, ESplineCoordinateSpace::World);
 
@@ -184,6 +177,20 @@ void AMonster::SufferDamage(float damage, AController* EventInstigator)
 
 	if (!MonTypeCurHP)
 	{
+		Capsule->SetVisibility(false);
+		SkeletalMesh->SetVisibility(false);
+		Widget_Front->SetVisibility(false);
+		Widget_Back->SetVisibility(false);
+
+		FVector Loc35 = MonPath->Spline->GetLocationAtSplinePoint(35, ESplineCoordinateSpace::World);
+
+		this->SetActorLocation(Loc35);
+
+		this->MonsterStop();
+
+		MainState->RemovetoMyList(this);
+
+		DieAnimation();
 		Gain_Gold(EventInstigator);
 
 	}
