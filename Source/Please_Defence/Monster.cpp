@@ -57,7 +57,7 @@ AMonster::AMonster()
 	Capsule->SetCollisionObjectType(ECollisionChannel::ECC_OverlapAll_Deprecated);
 
 	static ConstructorHelpers::FClassFinder<UUserWidget>WidgetClass
-	(TEXT("WidgetBlueprint'/Game/_Dev/Monster_KHJ/MonHPbar.MonHPbar'"));
+	(TEXT("WidgetBlueprint'/Game/_Dev/Monster_KHJ/MonHPbar.MonHPbar_C'"));
 	if (WidgetClass.Succeeded())
 	{
 		Widget_Front->SetWidgetClass(WidgetClass.Class);
