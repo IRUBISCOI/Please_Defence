@@ -67,14 +67,14 @@ public:
 		float MonCurStageSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MonTypeHP = 0;
+		int MonTypeHP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MonTypeSpeed = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int MonTypeMoney = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MonTypeCurHP = 0;
+		int MonTypeCurHP;
 
 	class AMonsterMovePath* MonPath;
 	class AEndPoint* EndPoint;
@@ -99,8 +99,8 @@ public:
 	FVector SplineLoc;
 	FRotator SplineRot;
 
-	UFUNCTION()
-	void Damage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
+		class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION()
 	void SufferDamage(float damage, AController* EventInstigator);
@@ -112,6 +112,6 @@ public:
 	void Gain_Gold(AController* target);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void SetHpBar(int CurHp, int MaxHp);
+	void SetHpBar();
 
 };
