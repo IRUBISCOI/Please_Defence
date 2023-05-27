@@ -39,12 +39,6 @@ void AGold_Pocket::Gain_Gold_Implementation(AController* target)
 	}
 }
 
-/*
-void AGold_Pocket::Gain_Gold_Implementation(APlease_DefenceCharacter* target)
-{
-	target->Set_Gold(Owning_Gold);
-}
-*/
 // Called every frame
 void AGold_Pocket::Tick(float DeltaTime)
 {
