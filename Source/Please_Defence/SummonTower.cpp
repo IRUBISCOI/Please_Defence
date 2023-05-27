@@ -16,7 +16,7 @@ ASummonTower::ASummonTower()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	StaticMeshCom = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_StaticMeshComponent(TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube_Chamfer.1M_Cube_Chamfer'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_StaticMeshComponent(TEXT("StaticMesh'/Game/Meshes/GroupOfBox.GroupOfBox'"));
 	BeforeSummonZone = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BeforeSummonZone"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>SM_BeforeSummonZone(TEXT("StaticMesh'/Game/Geometry/Meshes/1M_Cube_Chamfer.1M_Cube_Chamfer'"));
 	static ConstructorHelpers::FObjectFinder<UMaterial>M_BeforeSummonZone(TEXT("Material'/Game/_Dev/Defencer_KHY/M_DrawBeforeSummon.M_DrawBeforeSummon'"));
@@ -33,7 +33,7 @@ ASummonTower::ASummonTower()
 
 		BeforeSummonZone->SetCollisionProfileName(FName(TEXT("NoCollision")));
 		BeforeSummonZone->AttachToComponent(StaticMeshCom , FAttachmentTransformRules::KeepRelativeTransform);
-		BeforeSummonZone->SetRelativeLocation(FVector(GetActorLocation().X , GetActorLocation().Y , GetActorLocation().Z + 100));
+		BeforeSummonZone->SetRelativeLocation(FVector(GetActorLocation().X , GetActorLocation().Y , GetActorLocation().Z + 150));
 		Tower->AttachToComponent(BeforeSummonZone , FAttachmentTransformRules::KeepWorldTransform);
 		Box->AttachToComponent(StaticMeshCom , FAttachmentTransformRules::KeepWorldTransform);
 		Box->SetCollisionProfileName(FName(TEXT("OverlapAll")));
@@ -50,8 +50,6 @@ ASummonTower::ASummonTower()
 	Box->OnComponentBeginOverlap.AddDynamic(this , &ASummonTower::OnOverlapBegin);
 	Box->OnComponentEndOverlap.AddDynamic(this , &ASummonTower::OnOverlapEnd);
 
-	//static ConstructorHelpers::FClassFinder<UBuffComponent>ExBuffCom(TEXT("Class'/Script/Please_Defence.BuffComponent'"));
-	//static ConstructorHelpers::FClassFinder<USkillComponent>ExSkillCom(TEXT("Class'/Script/Please_Defence.SkillComponent'S"));
 	
 }
 
