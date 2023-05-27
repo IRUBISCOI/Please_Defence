@@ -22,7 +22,7 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void CalculateHp(int CurHealthPoint, int MaxHealthPoint);
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Gain_Gold(AController* target);
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
