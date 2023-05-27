@@ -93,7 +93,7 @@ void ASummonTower::Call_SetNormalTarget()
 	CallFunctionByNameWithArguments(TEXT("SetNormalTarget") , Ar , nullptr , true);
 }
 
-void ASummonTower::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult)
+void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult)
 {
 	
 	
@@ -136,7 +136,7 @@ void ASummonTower::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComp ,
 	
 }
 
-void ASummonTower::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex)
+void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex)
 {
 	
 		/*if (MyType == 0 || MyType == 1)
