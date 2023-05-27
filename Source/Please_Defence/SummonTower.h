@@ -53,7 +53,7 @@ public:
 	FName tag;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-	float FirstDistance;
+	float FirstDistance=15000.0f;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
 	AMonster* Target;
@@ -62,7 +62,7 @@ public:
 	TArray<AMonster*>TargetArr;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-	int MyType ;
+	int MyType =10;
 
 
 

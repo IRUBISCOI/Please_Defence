@@ -79,7 +79,7 @@ void AMainGameState::Tick(float DeltaTime)
 
 void AMainGameState::StageUp_Implementation()
 {
-	if (DTLowName >= 30)
+	if (DTLowName >= 10)
 	{
 		DTLowName = 0;
 	}
