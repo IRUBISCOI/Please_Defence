@@ -19,8 +19,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Animation/AnimInstance.h"
 #include "GameFramework/Actor.h"
-#include "GameFramework/Character.h"
-#include "Animation/AnimInstance.h"
+
 
 
 // Sets default values

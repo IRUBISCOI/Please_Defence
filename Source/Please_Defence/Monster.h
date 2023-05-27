@@ -56,9 +56,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void MonsterDispatcher();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UAnimMontage* AnimMontage;
-
 	UFUNCTION(BlueprintCallable)
 		void MoveToSpline(float Value);
 
@@ -78,6 +75,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int MonTypeCurHP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float CorrectionValue;
 
 	class AMonsterMovePath* MonPath;
 	class AEndPoint* EndPoint;
