@@ -7,18 +7,18 @@
 #include "Spawner.h"
 #include "MainGameState.h"
 #include "Please_DefenceCharacter.h"
+#include "Please_Defence_PlayerState.h"
 
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/SplineComponent.h"
+#include "Components/WidgetComponent.h"
 
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Animation/AnimInstance.h"
 #include "GameFramework/Actor.h"
-
-
 
 
 // Sets default values
@@ -33,6 +33,11 @@ AMonster::AMonster()
 	Capsule->SetupAttachment(RootComp);
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
 	SkeletalMesh->SetupAttachment(Capsule);
+
+	Widget_Front = CreateDefaultSubobject<UWidgetComponent>(TEXT("HP_Front"));
+	Widget_Front->SetupAttachment(SkeletalMesh);
+	Widget_Back = CreateDefaultSubobject<UWidgetComponent>(TEXT("HP_Back"));
+	Widget_Back->SetupAttachment(SkeletalMesh);
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SKeletalBase
 	(TEXT("SkeletalMesh'/Game/_Dev/Monster_KHJ/Animation/Standing_Walk_Forward.Standing_Walk_Forward'"));
@@ -50,7 +55,14 @@ AMonster::AMonster()
 	}
 
 	Capsule->SetCollisionObjectType(ECollisionChannel::ECC_OverlapAll_Deprecated);
-	
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>WidgetClass
+	(TEXT("WidgetBlueprint'/Game/_Dev/Monster_KHJ/MonHPbar.MonHPbar'"));
+	if (WidgetClass.Succeeded())
+	{
+		Widget_Front->SetWidgetClass(WidgetClass.Class);
+		Widget_Back->SetWidgetClass(WidgetClass.Class);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -83,6 +95,9 @@ void AMonster::BeginPlay()
 	MonCurStageSpeed = MainState->dt.Speed;
 
 	MonsterDispatcher();
+
+	MonTypeCurHP = MonTypeHP;
+	SetHpBar(MonTypeCurHP, MonTypeHP);
 
 	Capsule->SetVisibility(false);
 	SkeletalMesh->SetVisibility(true);
@@ -153,13 +168,18 @@ void AMonster::Damage(float DamageAmount, FDamageEvent const& DamageEvent, ACont
 	{
 		SufferDamage(DamageAmount, EventInstigator);
 	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange,
+			FString::Printf(TEXT("TakeDamage NULL")));
+	}
 }
 
 void AMonster::SufferDamage(float damage, AController* EventInstigator)
 {
-	MonCurStageHP -= damage;
+	MonTypeCurHP -= damage;
 
-	if (MonCurStageHP <= 0)
+	if (MonTypeCurHP <= 0)
 	{
 		Gain_Gold(EventInstigator);
 	}

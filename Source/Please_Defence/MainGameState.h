@@ -38,11 +38,11 @@ struct FCount
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonACount;
+		int MonACount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonBCount;
+		int MonBCount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonCCount;
+		int MonCCount;
 };
 
 USTRUCT(Atomic, BlueprintType)
@@ -93,12 +93,12 @@ public:
 		TSubclassOf<class ASpawner> TypeC;
 
 	UPROPERTY(BlueprintReadWrite)
-		float MonsterCount;
+		int MonsterCount;
 
 	UPROPERTY(BlueprintReadWrite)
 		float CurrentTime = 0;
 	UPROPERTY(BlueprintReadWrite)
-		float DelayTime = 2;
+		float DelayTime = 1;
 	UPROPERTY(BlueprintReadWrite)
 		bool bSpawnTimeBoolean = false;
 	
@@ -111,6 +111,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		ASpawner* SpawnMonTypeC;
 
+//	TArray<AActor*> spArray;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void StageUp();
@@ -128,6 +129,7 @@ public:
 
 	list<AMonster*> MyList;
 	
+	void Listupdate();
 	
 
 };

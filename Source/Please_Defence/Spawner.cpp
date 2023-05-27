@@ -59,7 +59,7 @@ void ASpawner::DelayTime()
 
 	SpawnerDispatcher();
 
-	for (float i = 0; i <= Totalcount; i++)
+	for (int i = 0; i <= Totalcount; i++)
 	{
 
 		spawnMon = GetWorld()->SpawnActor<AMonster>(MonsterFactory, Arrow->GetRelativeLocation(), FRotator(0));
@@ -69,18 +69,17 @@ void ASpawner::DelayTime()
 			mys.push(spawnMon);
 		}
 	}
+	spawnMon = NULL;
 };
 
 void ASpawner::TTTT()
 {
 	FTimerManager& spawntimeManager = GetWorld()->GetTimerManager();
-
 	if (bSetPathLocation)
 	{
-		if (SetCount.SpawnCount >= 0)
+		if (SetCount.SpawnCount >= 1)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Red, FString::Printf(TEXT("SpawnCount : %f"), SetCount.SpawnCount));
-			if (spawnMon != nullptr)
+			if (mys.size())
 			{
 				spawnMon = mys.front();
 				mainState->MyList.push_back(spawnMon);

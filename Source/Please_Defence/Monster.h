@@ -12,6 +12,7 @@
 class UCapsuleComponent;
 class USkeletalMeshComponent;
 class USceneComponent;
+class UWidgetComponent;
 
 
 UCLASS()
@@ -40,6 +41,10 @@ public:
 	UCapsuleComponent* Capsule;
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* SkeletalMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UWidgetComponent* Widget_Front;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UWidgetComponent* Widget_Back;
 
 public:
 	// BP¿¡¼­ call
@@ -62,11 +67,14 @@ public:
 		float MonCurStageSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonTypeHP = 0.0f;
+		int MonTypeHP = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MonTypeSpeed = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonTypeMoney = 0.0f;
+		int MonTypeMoney = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int MonTypeCurHP = 0;
 
 	class AMonsterMovePath* MonPath;
 	class AEndPoint* EndPoint;
@@ -102,5 +110,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Gain_Gold(AController* target);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetHpBar(int CurHp, int MaxHp);
 
 };

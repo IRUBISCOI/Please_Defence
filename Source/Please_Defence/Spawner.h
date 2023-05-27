@@ -18,7 +18,7 @@ struct FTypeCount
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float SpawnCount;
+		int SpawnCount;
 };
 
 class UStaticMeshComponent;
@@ -72,8 +72,7 @@ public:
 	int Totalcount = MAXCOUNT;
 
 	std::queue<AMonster*> mys;
-	std::queue<AMonster*> moving;
-	
+
 	UPROPERTY(BlueprintReadOnly)
 	bool bSetPathLocation = false;
 	

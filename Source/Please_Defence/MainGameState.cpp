@@ -8,8 +8,6 @@
 #include "Kismet/GameplayStatics.h"
 
 
-
-
 // Called when the game starts or when spawned
 void AMainGameState::BeginPlay()
 {
@@ -18,9 +16,9 @@ void AMainGameState::BeginPlay()
 
 	MonsterCount = ReadMainDT.count.MonACount + ReadMainDT.count.MonBCount + ReadMainDT.count.MonCCount;
 
-	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Blue, FString::Printf(TEXT("AAAA : %f"), ReadMainDT.count.MonACount));
-	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Red, FString::Printf(TEXT("BBBB : %f"), ReadMainDT.count.MonBCount));
-	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Green, FString::Printf(TEXT("CCCC : %f"), ReadMainDT.count.MonCCount));
+	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Blue, FString::Printf(TEXT("AAAA : %d"), ReadMainDT.count.MonACount));
+	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Red, FString::Printf(TEXT("BBBB : %d"), ReadMainDT.count.MonBCount));
+	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Green, FString::Printf(TEXT("CCCC : %d"), ReadMainDT.count.MonCCount));
 
 	MonsterCount = dt.MaxCount;
 
@@ -30,7 +28,18 @@ void AMainGameState::BeginPlay()
 	AActor* spawnerB = UGameplayStatics::GetActorOfClass(GetWorld(), TypeB);
 	AActor* spawnerC = UGameplayStatics::GetActorOfClass(GetWorld(), TypeC);
 
+//	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawner::StaticClass(), spArray);
+//
+//	if (spArray.Num() != NULL)
+//	{
+//		for (int i = 0; i < sizeof(spArray); i++)
+//		{
+//			ASpawner* Newsp = Cast<ASpawner>(spArray[i]);
+//		}
+//	}
+
 	Spawner = Cast<ASpawner>(spawner);
+
 	SpawnMonTypeA = Cast<ASpawner>(spawnerA);
 	SpawnMonTypeB = Cast<ASpawner>(spawnerB);
 	SpawnMonTypeC = Cast<ASpawner>(spawnerC);
@@ -51,8 +60,6 @@ void AMainGameState::BeginPlay()
 	{
 		SpawnMonTypeC->SetCount.SpawnCount = ReadMainDT.count.MonCCount;
 	}
-
-
 }
 
 // Called every frame
@@ -60,6 +67,14 @@ void AMainGameState::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
+
+	CurrentTime += DeltaTime;
+	if (CurrentTime >= DelayTime)
+	{
+		Listupdate();
+		CurrentTime = 0;
+	}
 }
 
 void AMainGameState::StageUp_Implementation()
@@ -85,7 +100,15 @@ void AMainGameState::RemovetoMyList(AMonster* Monster)
 		Spawner->bSetPathLocation = false;
 		WidgetVisible();
 		StageUp();
-		
+	}
+}
+
+void AMainGameState::Listupdate()
+{
+	for (auto iter = MyList.begin(); iter != MyList.end(); ++iter)
+	{
+		AMonster* i = *iter;
+		//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Magenta, FString::Printf(TEXT("My List : %s"), *i->GetName()));
 	}
 }
 
