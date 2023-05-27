@@ -97,7 +97,6 @@ void AMonster::BeginPlay()
 	MonsterDispatcher();
 
 	MonTypeCurHP = MonTypeHP;
-	SetHpBar(MonTypeCurHP, MonTypeHP);
 
 	Capsule->SetVisibility(false);
 	SkeletalMesh->SetVisibility(true);
@@ -157,12 +156,12 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 	}
 }
 
-void AMonster::Damage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange,
 		FString::Printf(TEXT("TakeDamage Damage = %f EventInstigator = %s"), DamageAmount, *EventInstigator->GetName()));
 
-	APlease_DefenceCharacter* Player = Cast<APlease_DefenceCharacter>(EventInstigator);
+	AController* Player = Cast<AController>(EventInstigator);
 
 	if (Player)
 	{
@@ -173,15 +172,20 @@ void AMonster::Damage(float DamageAmount, FDamageEvent const& DamageEvent, ACont
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange,
 			FString::Printf(TEXT("TakeDamage NULL")));
 	}
+	return 0.0f;
 }
 
 void AMonster::SufferDamage(float damage, AController* EventInstigator)
 {
 	MonTypeCurHP -= damage;
+	MonTypeCurHP = FMath::Clamp((float)MonTypeCurHP, 0.0f, (float)MonTypeHP);
 
-	if (MonTypeCurHP <= 0)
+	SetHpBar();
+
+	if (!MonTypeCurHP)
 	{
 		Gain_Gold(EventInstigator);
+
 	}
 }
 
