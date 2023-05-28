@@ -138,9 +138,9 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 		Widget_Front->SetVisibility(false);
 		Widget_Back->SetVisibility(false);
 
-		FVector Loc35 = MonPath->Spline->GetLocationAtSplinePoint(35, ESplineCoordinateSpace::World);
+		FVector Loc0 = MonPath->Spline->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World);
 
-		this->SetActorLocation(Loc35);
+		this->SetActorLocation(Loc0);
 
 		this->MonsterStop();
 
@@ -181,9 +181,9 @@ void AMonster::SufferDamage(float damage, AController* EventInstigator)
 		Widget_Front->SetVisibility(false);
 		Widget_Back->SetVisibility(false);
 
-		FVector Loc35 = MonPath->Spline->GetLocationAtSplinePoint(35, ESplineCoordinateSpace::World);
+		FVector Loc0 = MonPath->Spline->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World);
 
-		this->SetActorLocation(Loc35);
+		this->SetActorLocation(Loc0);
 
 		this->MonsterStop();
 
