@@ -64,8 +64,8 @@ void USkillComponent::ActiveSkill_Implementation()
 			}
 			UGameplayStatics::ApplyDamage(Target , Damage, nullptr , nullptr , UDamageType::StaticClass());
 			TimerManager.SetTimer(TimerHandle ,this,&USkillComponent::ClearEmitter_Implementation ,Delay-0.1f ,false );
-			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("SpawnEmitter")));
-			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Emitter:%s"), *(SettingEmitter->GetName())));
+			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("Damage: %f") , Damage));
+			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Emitter:%s"), *(SettingEmitter->GetName())));
 
 
 		}
