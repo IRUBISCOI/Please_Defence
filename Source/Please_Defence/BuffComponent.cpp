@@ -41,12 +41,12 @@ void UBuffComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 void UBuffComponent::Buff_Implementation()
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld() , Particle , Location , FRotator::ZeroRotator , FVector(1.f , 1.f , 1.f) , false , EPSCPoolMethod::None , true);
-	APlease_Defence_PlayerState* Ps= Cast<APlease_Defence_PlayerState>(GetWorld()->GetFirstPlayerController()->PlayerState);
+	APlease_Defence_PlayerState* Ps= Cast<APlease_Defence_PlayerState>(GetWorld()->GetFirstPlayerController()->GetPawn()->GetPlayerState());
 	if (Ps)
 	{
 		float DefaultDamage= Ps->Get_Weapon_Damage();
 		Ps->Set_Weapon_Damage(DefaultDamage + Damage);
-		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("DefaultDamage = %f") , DefaultDamage));
+		GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Black , FString::Printf(TEXT("DefaultDamage = %f") , DefaultDamage + Damage));
 		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("DefaultDamage + Damage = %f") , DefaultDamage + Damage));
 	}
 }

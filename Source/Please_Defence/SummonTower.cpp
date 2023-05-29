@@ -147,8 +147,7 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 			{
 
 			
-				if (OverlapMon->Capsule->IsVisible())
-				{
+				
 					GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("OnOverlapEnd")));
 
 					if (TargetArr.Remove(OverlapMon))
@@ -161,6 +160,7 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 								Target= var;
 							}
 						}
+						//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Target:%s") , *Target->GetName()));
 						ExSettingTarget();
 					}
 					else
@@ -193,8 +193,7 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 
 					}
 				
-				}
-
+				
 
 			}
 		}
@@ -257,8 +256,8 @@ void ASummonTower::Summon_Implementation()
 		if (BeforeSummonZone->IsVisible())
 		{
 
-			//int RandomInteger = 2;
-			int RandomInteger = FMath::RandRange(0,2);
+			int RandomInteger = 1;
+			//int RandomInteger = FMath::RandRange(0,2);
 			//RandomInteger = 1;
 			MyType= RandomInteger;
 			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Damage:%d") , MyType));
@@ -382,6 +381,7 @@ void ASummonTower::SelectTower_Implementation()
 		{
 			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("BuffTower")));
 			BuffCom->SettingBuff(BuffTower.DamageVariance, BuffTower.DelayVariance, BuffTower.Particle, StaticMeshCom->GetComponentLocation());
+			BuffCom->Buff();
 		}
 		break;
 	}
@@ -400,6 +400,8 @@ void ASummonTower::ExSettingTarget_Implementation()
 	case 1:
 		{
 		SkillCom->SetTarget(Target);
+		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Target:%s") , *Target->GetName()));
+
 		}
 		break;
 	

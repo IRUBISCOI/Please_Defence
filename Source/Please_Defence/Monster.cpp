@@ -172,6 +172,8 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 void AMonster::SufferDamage(float damage, AController* EventInstigator)
 {
 	MonTypeCurHP -= damage;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::White, FString::Printf(TEXT("After Tower Damage = %f   "), damage));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::White, FString::Printf(TEXT("MonTypeCurHP  = %f   "), MonTypeCurHP));
 	MonTypeCurHP = FMath::Clamp((float)MonTypeCurHP, 0.0f, (float)MonTypeHP);
 
 	SetHpBar();
