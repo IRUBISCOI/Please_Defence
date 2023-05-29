@@ -150,19 +150,21 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 
 float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange,
-		FString::Printf(TEXT("TakeDamage Damage = %f "), DamageAmount));
+	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange,FString::Printf(TEXT("TakeDamage Damage = %f "), DamageAmount));
 
 	AController* Player = Cast<AController>(EventInstigator);
 
 	if (Player)
 	{
 		SufferDamage(DamageAmount, EventInstigator);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Player Damage = %f   "), DamageAmount));
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange,
-			FString::Printf(TEXT("Player NULL")));
+		Player = GetWorld()->GetFirstPlayerController();
+		SufferDamage(DamageAmount, Player);
+
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Tower Damage = %f   "), DamageAmount));
 	}
 	return 0.0f;
 }
