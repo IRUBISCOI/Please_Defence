@@ -9,6 +9,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Gold_Pocket.h"
 #include "Monster.h"
+#include "Engine/CollisionProfile.h"
 
 
 // Sets default values
@@ -85,8 +86,29 @@ void AWeapon::Shoot()
 		FVector end = (forward * 5000) + shooter->PlayerCameraManager->GetCameraLocation();
 
 		FHitResult result;
+		/*
+		ECollisionChannel CollisionChannel;
 
-		bool isHit = GetWorld()->LineTraceSingleByObjectType(result, start, end, ECollisionChannel::ECC_WorldDynamic);
+		CollisionProfile = UCollisionProfile::Get();
+
+		CollisionChannel.
+
+		const FName& ProfileName = CollisionProfile->ConvertToObjectType(CollisionChannel);
+		ObjectQueryParams.AddObjectTypesToQuery(ProfileName);*/
+		
+
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.bReturnPhysicalMaterial = true;
+		CollisionParams.TraceTag = FName("Monster"); // 특정 테그를 지정하여 관리할 수 있습니다. (옵션)
+		bool isHit = GetWorld()->LineTraceSingleByChannel(result, start, end, ECollisionChannel::ECC_WorldDynamic, CollisionParams);
+
+		//bool isHit = GetWorld()->LineTraceSingleByObjectType(result, start, end, ECollisionChannel::ECC_WorldDynamic);
+
+		//bool isHit = GetWorld()->LineTraceSingleByObjectType(result, start, end, TEXT("Monster"));
+
+		//FCollisionQueryParams TraceParams(FName(TEXT("Trace")), true, IgnoreActor);
+		//
+		//bool Hit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, TraceParams);
 
 		DrawDebugLine(GetWorld(), start, end, FColor::Yellow, false, 1.0f);
 
@@ -100,7 +122,7 @@ void AWeapon::Shoot()
 			AGold_Pocket* HitObject = Cast<AGold_Pocket>(result.GetActor());
 			if (HitObject)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("GoldPocket")));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("GoldPocket")));
 				//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("ApplyDamage : %d"), Damage));
 				UGameplayStatics::ApplyDamage(HitObject, Damage, OwnChar->GetController(), this, UDamageType::StaticClass());
 			}
@@ -108,7 +130,9 @@ void AWeapon::Shoot()
 			AMonster* HitMonster = Cast<AMonster>(result.GetActor());
 			if (HitMonster)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Monster")));
+				//GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, FString::Printf(TEXT("Monster")));
+				//GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, FString::Printf(TEXT("ApplyDamage : %d"), Damage));
+				GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Yellow, FString::Printf(TEXT("%s"), *HitMonster->GetName()));
 				UGameplayStatics::ApplyDamage(HitMonster, Damage, OwnChar->GetController(), this, UDamageType::StaticClass());
 			}
 		}

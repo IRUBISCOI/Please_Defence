@@ -36,6 +36,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UParticleSystem* ParticleSystem;
 
+	UCollisionProfile* CollisionProfile;
+
 	ACharacter* OwnChar;
 
 	int Ammo;
