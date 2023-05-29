@@ -48,7 +48,7 @@ void ASpawner::SetStart()
 	bSetPathLocation = true;
 
 	FTimerManager& spawntimeManager = GetWorld()->GetTimerManager();
-	spawntimeManager.SetTimer(timerHandle, this, &ASpawner::TTTT, 2.0f, true);
+	spawntimeManager.SetTimer(timerHandle, this, &ASpawner::TTTT, 1.0f, true);
 }
 
 void ASpawner::DelayTime()
