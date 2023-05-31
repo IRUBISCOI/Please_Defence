@@ -16,15 +16,11 @@ void AMainGameState::BeginPlay()
 
 	MonsterCount = ReadMainDT.count.MonACount + ReadMainDT.count.MonBCount + ReadMainDT.count.MonCCount;
 
-	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Green, FString::Printf(TEXT("MONSTERCOUNT : %d"), MonsterCount));
-
 	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Blue, FString::Printf(TEXT("AAAA : %d"), ReadMainDT.count.MonACount));
 	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Red, FString::Printf(TEXT("BBBB : %d"), ReadMainDT.count.MonBCount));
 	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Green, FString::Printf(TEXT("CCCC : %d"), ReadMainDT.count.MonCCount));
 
 	MonsterCount = dt.MaxCount;
-
-	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Green, FString::Printf(TEXT("DT.MAXCOUNT MONSTERCOUNT : %d"), MonsterCount));
 
 	AActor* spawner = UGameplayStatics::GetActorOfClass(GetWorld(), ASpawner::StaticClass());
 
@@ -71,6 +67,14 @@ void AMainGameState::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
+
+	CurrentTime += DeltaTime;
+	if (CurrentTime >= DelayTime)
+	{
+		Listupdate();
+		CurrentTime = 0;
+	}
 }
 
 void AMainGameState::StageUp_Implementation()
@@ -99,6 +103,13 @@ void AMainGameState::RemovetoMyList(AMonster* Monster)
 	}
 }
 
-
+void AMainGameState::Listupdate()
+{
+	for (auto iter = MyList.begin(); iter != MyList.end(); ++iter)
+	{
+		AMonster* i = *iter;
+		//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Magenta, FString::Printf(TEXT("My List : %s"), *i->GetName()));
+	}
+}
 
 	

@@ -18,7 +18,7 @@ struct Fmaindt
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int Stage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -94,6 +94,13 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 		int MonsterCount;
+
+	UPROPERTY(BlueprintReadWrite)
+		float CurrentTime = 0;
+	UPROPERTY(BlueprintReadWrite)
+		float DelayTime = 1;
+	UPROPERTY(BlueprintReadWrite)
+		bool bSpawnTimeBoolean = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		ASpawner* Spawner;
@@ -121,6 +128,8 @@ public:
 	void RemovetoMyList(AMonster* Monster);
 
 	list<AMonster*> MyList;
+	
+	void Listupdate();
 	
 
 };

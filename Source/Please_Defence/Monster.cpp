@@ -77,6 +77,9 @@ void AMonster::BeginPlay()
 
 	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMonster::OnCapsuleBeginOverlap);
 
+	MonCurStageHP = MainState->dt.MaxHP;
+	MonCurStageSpeed = MainState->dt.Speed;
+
 	MonsterDispatcher();
 
 	MonTypeCurHP = MonTypeHP;
@@ -109,12 +112,10 @@ void AMonster::MoveToSpline(float Value)
 {
 	if (MonPath != nullptr)
 	{
-		//Capsule->SetVisibility(true);
+		Capsule->SetVisibility(true);
 		SkeletalMesh->SetVisibility(true);
 		Widget_Front->SetVisibility(true);
 		Widget_Back->SetVisibility(true);
-
-		Capsule->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 		float Loc = MonPath->Spline->GetSplineLength();
 		float lerp = UKismetMathLibrary::Lerp(0, Loc, Value);
@@ -132,12 +133,10 @@ void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 {
 	if (OtherActor == EndPoint)
 	{
-		//Capsule->SetVisibility(false);
+		Capsule->SetVisibility(false);
 		SkeletalMesh->SetVisibility(false);
 		Widget_Front->SetVisibility(false);
 		Widget_Back->SetVisibility(false);
-
-		Capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 		FVector Loc0 = MonPath->Spline->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World);
 
@@ -181,12 +180,10 @@ void AMonster::SufferDamage(float damage, AController* EventInstigator)
 
 	if (!MonTypeCurHP)
 	{
-		//Capsule->SetVisibility(false);
+		Capsule->SetVisibility(false);
 		SkeletalMesh->SetVisibility(false);
 		Widget_Front->SetVisibility(false);
 		Widget_Back->SetVisibility(false);
-
-		Capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 		FVector Loc0 = MonPath->Spline->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World);
 
