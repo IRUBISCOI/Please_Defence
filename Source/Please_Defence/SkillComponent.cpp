@@ -34,6 +34,8 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
+
+
 void USkillComponent::SettingSkill_Implementation(float BeforeRange , float BeforeDamage , float BeforeDelay , float BeforeDistance , UParticleSystem* BeforePaticle , FVector BeforeLocation)
 {
 	Range= BeforeRange;
@@ -64,7 +66,7 @@ void USkillComponent::ActiveSkill_Implementation()
 			}
 			UGameplayStatics::ApplyDamage(Target , Damage, nullptr , nullptr , UDamageType::StaticClass());
 			TimerManager.SetTimer(TimerHandle ,this,&USkillComponent::ClearEmitter_Implementation ,Delay-0.1f ,false );
-			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("Damage: %f") , Damage));
+			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("Damage: %f") , Damage));
 			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Emitter:%s"), *(SettingEmitter->GetName())));
 
 
