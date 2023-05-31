@@ -8,7 +8,7 @@
 #include "Containers/Array.h" 
 #include "queue"
 
-#define MAXCOUNT 100;
+#define MAXCOUNT 30;
 
 #include "Spawner.generated.h"
 
@@ -68,6 +68,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 		float CurSpawnCount = 0;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Totalcount = MAXCOUNT;
 
@@ -83,7 +84,7 @@ public:
 	FTimerHandle timerHandle;
 
 	UFUNCTION()
-		void TTTT();
+		void StartUp();
 
 	
 

@@ -59,12 +59,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void MoveToSpline(float Value);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float CurveTrack;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonCurStageHP;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonCurStageSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int MonTypeHP;
@@ -88,11 +82,11 @@ public:
 	class ASpawner* SpawnerB;
 	class ASpawner* SpawnerC;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 		TSubclassOf<class ASpawner> TypeA;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 		TSubclassOf<class ASpawner> TypeB;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY()
 		TSubclassOf<class ASpawner> TypeC;
 
 	UFUNCTION()
@@ -116,5 +110,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetHpBar();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float MonCurStageHP;
 
 };
