@@ -121,6 +121,10 @@ public:
 
 	FName MonName;
 
+	int ArrCount=0;
+
+	bool Cooldown = true;
+
 
 	
 	
