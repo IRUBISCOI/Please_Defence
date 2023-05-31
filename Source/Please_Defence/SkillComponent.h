@@ -54,7 +54,7 @@ public:
 
 	FTimerHandle TimerHandle;
 	
-
+	
 
 public:
 
@@ -69,5 +69,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
 		void SetTarget(AActor * BeforeTarget);
+	
 		
 };

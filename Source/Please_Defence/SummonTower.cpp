@@ -66,16 +66,63 @@ void ASummonTower::BeginPlay()
 void ASummonTower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (IsValid(Target))
+	if (TargetArr.Num()>0)
 	{
-		if (Target->MonTypeHP <= 0)
+		AttackTimeAcc += DeltaTime;
+		switch (MyType)
 		{
-			Target=nullptr;
-			FirstDistance=15000.0f;
-			
-			ExSettingTarget();
+		case 0:
+		{
+			float AttackInterval=0.5;
+			if (AttackTimeAcc >= AttackInterval)
+			{
+				// 공격력으로 공격
+				if (Target->MonCurStageHP>=0)
+				{
+					ExAttack();
+				}
+
+				// 다음 공격을 위해 시간누적값 초기화
+				AttackTimeAcc = 0;
+			}
+			break;
 		}
+		case 1:
+		{
+			float AttackInterval=0.5;
+			if (AttackTimeAcc >= AttackInterval)
+			{
+				// 공격력으로 공격
+				if (Target->MonCurStageHP >= 0)
+				{
+					SkillCom->ActiveSkill();
+				}
+
+				// 다음 공격을 위해 시간누적값 초기화
+				AttackTimeAcc = 0;
+			}
+			break;
+		}
+		
+		}
+		
 	}
+	else
+	{
+		Target=nullptr;
+		FindNewTarget();
+	}
+	//if (IsValid(Target))
+	//{
+	//	if (Target->MonTypeHP <= 0)
+	//	{
+	//		Target=nullptr;
+	//		FirstDistance=15000.0f;
+	//		
+	//		ExSettingTarget();
+	//	}
+	//}
+	
 
 }
 
@@ -101,6 +148,7 @@ void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* 
 			if (OverlapMon->Capsule == Cast <UCapsuleComponent> (OtherComp))
 			{
 				TargetArr.Add(OverlapMon);
+				MonName=*OverlapMon->GetName();
 				if (IsValid(Target))
 				{
 
@@ -108,28 +156,30 @@ void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* 
 				else
 				{
 					Target= OverlapMon;
-					GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("OnOverlapBegin and TargetOn")));
+					//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("OnOverlapBegin and TargetOn")));
 
 					switch (MyType)
 					{
 					case 0:
 						{
 						Call_SetNormalTarget();
-						FTimerManager& TimerManager = GWorld->GetTimerManager();
+						//FTimerManager& TimerManager = GWorld->GetTimerManager();
 						//FName ArrayName="Die"; 
 						//ArrayName = OtherActor->Tags[0];
-						TimerManager.SetTimer(TimerHandle , this , &ASummonTower::ExAttack , 0.5f , true);
+						//TimerManager.SetTimer(TimerHandle , this , &ASummonTower::ExAttack , 0.5f , true);
+						
 						}
 						break;
 					case 1:
 						{
 						SkillCom->SetTarget(Target);
 						SkillCom->ClearEmitter();
-						SkillCom->ActiveSkill();
+						//SkillCom->ActiveSkill();
 						//FName ArrayName = "Die";
 						//ArrayName = OtherActor->Tags[0];
-						FTimerManager& TimerManager = GWorld->GetTimerManager();
-						TimerManager.SetTimer(TimerHandle , SkillCom , &USkillComponent::ActiveSkill, SkillCom ->Delay, true);
+						//FTimerManager& TimerManager = GWorld->GetTimerManager();
+						//TimerManager.SetTimer(TimerHandle , SkillCom , &USkillComponent::ActiveSkill, SkillCom ->Delay, true);
+						
 						}
 						break;
 					}
@@ -146,60 +196,135 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 			if (AMonster* OverlapMon = Cast<AMonster>(OtherActor))
 			{
 
-			
-				
-					GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("OnOverlapEnd")));
-
-					if (TargetArr.Remove(OverlapMon))
+					
+				TargetArr.Remove(OverlapMon);
+				if (!IsValid(Target))
+				{
+					//TargetArr.Remove(OverlapMon);
+					FindNewTarget();
+					switch (MyType)
 					{
-						for ( AMonster* var : TargetArr)
-						{
-							if (FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation()) < FirstDistance)
-							{
-								FirstDistance= FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation());
-								Target= var;
-							}
-						}
-						//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Target:%s") , *Target->GetName()));
-						ExSettingTarget();
-					}
-					else
-					{
-						FirstDistance=15000.0f;
-						Target=nullptr;
-						switch (MyType)
-						{
-
+					
 						case 0:
 						{
 							Call_SetNormalTarget();
-							FTimerManager& TimerManager = GWorld->GetTimerManager();
-							TimerManager.ClearTimer(TimerHandle);
-
+							
+							//FTimerManager& TimerManager = GWorld->GetTimerManager();
+							//TimerManager.ClearTimer(TimerHandle);
+						
 						}
 						break;
 						case 1:
 						{
 							SkillCom->SetTarget(Target);
-							FTimerManager& TimerManager = GWorld->GetTimerManager();
-							TimerManager.ClearTimer(TimerHandle);
+							
+							//FTimerManager& TimerManager = GWorld->GetTimerManager();
+							//TimerManager.ClearTimer(TimerHandle);
+							
+							//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("TargetLost")));
 						}
 						break;
-
-
+						
+						
 						default:
 							break;
-						}
-
+						
 					}
+				}
+				//else
+				//{
+				//	TargetArr.Remove(OverlapMon);
+				//	FindNewTarget();
+				//}
+					
 				
-				
-
 			}
 		}
+}
+
+					//if (TargetArr.Remove(OverlapMon))
+					//{
+					//	for ( AMonster* var : TargetArr)
+					//	{
+					//		if (FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation()) < FirstDistance)
+					//		{
+					//			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("OnOverlapEnd")));
+					//			FirstDistance= FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation());
+					//			Target= var;
+					//			
+					//		}
+					//	}
+					//	////GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Target:%s") , *Target->GetName()));
+					//	ExSettingTarget();
+					//	FirstDistance=15000.0f;
+					//}
+					//else
+					//{
+					//	FirstDistance=15000.0f;
+					//	Target=nullptr;
+					//	switch (MyType)
+					//	{
+					//
+					//	case 0:
+					//	{
+					//		Call_SetNormalTarget();
+					//		//FTimerManager& TimerManager = GWorld->GetTimerManager();
+					//		//TimerManager.ClearTimer(TimerHandle);
+					//
+					//	}
+					//	break;
+					//	case 1:
+					//	{
+					//		SkillCom->SetTarget(Target);
+					//		//FTimerManager& TimerManager = GWorld->GetTimerManager();
+					//		//TimerManager.ClearTimer(TimerHandle);
+					//		
+					//		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("TargetLost")));
+					//	}
+					//	break;
+					//
+					//
+					//	default:
+					//		break;
+					//	}
+					//
+					//}
+				
+				
+				
+
+			
 	
 
 
+
+
+void ASummonTower::FindNewTarget_Implementation()
+{
+
+	Target=nullptr;
+	float NearDistance=15000.0f;
+	for (AMonster* var : TargetArr)
+	{
+		if (var->MonCurStageHP >= 0)
+		{
+			continue;
+		}
+		float Distance= FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation());
+		if (Distance < NearDistance)
+		{
+			NearDistance= Distance;
+			Target=var;
+		}
+
+		//if (FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation()) < FirstDistance)
+		//{
+		//	//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("OnOverlapEnd")));
+		//	FirstDistance = FVector::Distance(StaticMeshCom->GetComponentLocation() , var->GetActorLocation());
+		//	Target = var;
+		//
+		//}
+	}
 
 }
 
@@ -209,7 +334,7 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 
 void ASummonTower::ExAttack_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta, FString::Printf(TEXT("Attack")));
+	//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta, FString::Printf(TEXT("Attack")));
 	if (IsValid(Target))
 	{
 		if (Target->MonCurStageHP > 0)
@@ -240,7 +365,7 @@ void ASummonTower::ExSetAttackArray_Implementation()
 		//Missile->FindComponentByClass(UStaticMeshComponent* )
 		//Missile->GetComponentsByTag(UStaticMeshComponent* Cube,FName"asd")
 		MissileArray.Add(Missile);
-		GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Array")));
+		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Array")));
 	}
 	
 	
@@ -260,7 +385,7 @@ void ASummonTower::Summon_Implementation()
 			//int RandomInteger = FMath::RandRange(0,2);
 			//RandomInteger = 1;
 			MyType= RandomInteger;
-			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Damage:%d") , MyType));
+			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Damage:%d") , MyType));
 			switch (RandomInteger)
 			{
 				case 0:
@@ -280,7 +405,7 @@ void ASummonTower::Summon_Implementation()
 						NormalTower.AttackDistacne= ExNormalTower->AttackDistacne;
 						NormalTower.Damage= ExNormalTower->Damage;
 						NormalTower.Delay= ExNormalTower->Delay;
-						//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Damage:%f") , NormalTower.Damage));
+						////GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Damage:%f") , NormalTower.Damage));
 						Tags[0] = "MakeTower";
 						
 						SelectTower();
@@ -304,9 +429,9 @@ void ASummonTower::Summon_Implementation()
 					//SkillTower.Delay=ExSkillTower->Delay;
 					//SkillTower.Distance =ExSkillTower->Distance;
 
-					//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Damage:%s") , SkillTower.Damage));
-					//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Delay:%s") , SkillTower.Delay));
-					//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Dis:%s") , SkillTower.Distance));
+					////GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Damage:%s") , SkillTower.Damage));
+					////GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Delay:%s") , SkillTower.Delay));
+					////GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Dis:%s") , SkillTower.Distance));
 					if (IsValid(ExSkillTower->StaticMesh))
 					{ 
 						Tower->SetStaticMesh(ExSkillTower->StaticMesh);
@@ -315,14 +440,14 @@ void ASummonTower::Summon_Implementation()
 						SkillTower.Delay=ExSkillTower->Delay;
 						SkillTower.Distance =ExSkillTower->Distance;
 						SkillTower.Particle =ExSkillTower->Particle;
-						GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Tags:%f") , SkillTower.Damage));
+						//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Tags:%f") , SkillTower.Damage));
 
 
 					
 						Tags[0] = "MakeTower";
 						SelectTower();
-						//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Tags:%s") , *this->Tags[0].ToString()));
-						//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Tags:%f") , ExSkillTower->Damage));
+						////GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Tags:%s") , *this->Tags[0].ToString()));
+						////GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Tags:%f") , ExSkillTower->Damage));
 					}
 				}
 				break;
@@ -343,7 +468,7 @@ void ASummonTower::Summon_Implementation()
 						BuffTower.Particle= ExBuffTower->Particle;
 						BuffTower.DamageVariance= ExBuffTower->DamageVariance;
 						BuffTower.DelayVariance= ExBuffTower->DelayVariance;
-						GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("DamageVariance:%f") , BuffTower.DamageVariance));
+						//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("DamageVariance:%f") , BuffTower.DamageVariance));
 					
 						Tags[0] = "MakeTower";
 						SelectTower();
@@ -367,19 +492,19 @@ void ASummonTower::SelectTower_Implementation()
 	case 0:
 		{
 			ExSetAttackArray();
-			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("NormalTower")));
+			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("NormalTower")));
 		}
 		break;
 	case 1:
 		{
-			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("SkillTower")));
+			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("SkillTower")));
 			SkillCom->SettingSkill(SkillTower.Range, SkillTower.Damage, SkillTower.Delay, SkillTower.Distance, SkillTower.Particle, StaticMeshCom->GetComponentLocation());
 
 		}
 		break;
 	case 2:
 		{
-			GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("BuffTower")));
+			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("BuffTower")));
 			BuffCom->SettingBuff(BuffTower.DamageVariance, BuffTower.DelayVariance, BuffTower.Particle, StaticMeshCom->GetComponentLocation());
 			BuffCom->Buff();
 		}
@@ -400,7 +525,7 @@ void ASummonTower::ExSettingTarget_Implementation()
 	case 1:
 		{
 		SkillCom->SetTarget(Target);
-		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Target:%s") , *Target->GetName()));
+		////GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Target:%s") , *Target->GetName()));
 
 		}
 		break;

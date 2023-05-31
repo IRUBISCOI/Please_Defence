@@ -34,6 +34,8 @@ void USkillComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
+
+
 void USkillComponent::SettingSkill_Implementation(float BeforeRange , float BeforeDamage , float BeforeDelay , float BeforeDistance , UParticleSystem* BeforePaticle , FVector BeforeLocation)
 {
 	Range= BeforeRange;

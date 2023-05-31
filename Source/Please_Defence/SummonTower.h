@@ -114,6 +114,14 @@ public:
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
 	UActorComponent* BuffActorCom;
 
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	bool IsOn=false;
+
+	float AttackTimeAcc=0;
+
+	FName MonName;
+
+
 	
 	
 public:
@@ -148,5 +156,6 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex);
 
-
+	UFUNCTION(BlueprintNativeEvent , BlueprintCallable)
+	void FindNewTarget();
 };
