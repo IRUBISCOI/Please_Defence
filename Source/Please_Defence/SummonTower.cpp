@@ -68,50 +68,65 @@ void ASummonTower::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (TargetArr.Num()>0)
 	{
-		AttackTimeAcc += DeltaTime;
-		switch (MyType)
+		if (Target->MonTypeCurHP> 0)
 		{
-		case 0:
-		{
-			float AttackInterval=0.5;
-			if (AttackTimeAcc >= AttackInterval)
-			{
-				// 공격력으로 공격
-				if (Target->MonCurStageHP>=0)
+			AttackTimeAcc += DeltaTime;
+				switch (MyType)
 				{
-					ExAttack();
-				}
-
-				// 다음 공격을 위해 시간누적값 초기화
-				AttackTimeAcc = 0;
-			}
-			break;
-		}
-		case 1:
-		{
-			float AttackInterval=0.5;
-			if (AttackTimeAcc >= AttackInterval)
-			{
-				// 공격력으로 공격
-				if (Target->MonCurStageHP >= 0)
+				case 0:
 				{
-					SkillCom->ActiveSkill();
+					float AttackInterval=0.5;
+					if (AttackTimeAcc >= AttackInterval)
+					{
+						// 공격력으로 공격
+					//if (Target->MonTypeCurHP >=0)
+					//{
+						ExAttack();
+					//}
+						
+				
+						// 다음 공격을 위해 시간누적값 초기화
+					AttackTimeAcc = 0;
+					}
+					
+					break;
 				}
+					case 1:
+					{
+						float AttackInterval=0.5;
+						if (AttackTimeAcc >= AttackInterval)
+						{
+							// 공격력으로 공격
+							//if (Target->MonCurStageHP >= 0)//여기 에러래여
+							//{
+								SkillCom->ActiveSkill();
+							//}
+							
+					
+							// 다음 공격을 위해 시간누적값 초기화
+							AttackTimeAcc = 0;
+						}
 
-				// 다음 공격을 위해 시간누적값 초기화
-				AttackTimeAcc = 0;
-			}
-			break;
+						
+						break;
+					}
+				
+				}
+			
 		}
-		
+		else
+		{
+			Target=nullptr;
+			FindNewTarget();
 		}
-		
+
+
 	}
-	else
-	{
-		Target=nullptr;
-		FindNewTarget();
-	}
+	//else
+	//{
+	//	Target=nullptr;
+	//	FindNewTarget();
+	//}
 	//if (IsValid(Target))
 	//{
 	//	if (Target->MonTypeHP <= 0)
@@ -147,17 +162,16 @@ void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* 
 			AMonster* OverlapMon= Cast<AMonster>(OtherActor);
 			if (OverlapMon->Capsule == Cast <UCapsuleComponent> (OtherComp))
 			{
-				TargetArr.Add(OverlapMon);
-				MonName=*OverlapMon->GetName();
+				
+				FindNewTarget();
 				if (IsValid(Target))
 				{
-
+					//TargetArr.Add(OverlapMon);
 				}
 				else
 				{
-					Target= OverlapMon;
-					//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::White , FString::Printf(TEXT("OnOverlapBegin and TargetOn")));
-
+					
+					
 					switch (MyType)
 					{
 					case 0:
@@ -167,7 +181,7 @@ void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* 
 						//FName ArrayName="Die"; 
 						//ArrayName = OtherActor->Tags[0];
 						//TimerManager.SetTimer(TimerHandle , this , &ASummonTower::ExAttack , 0.5f , true);
-						
+						TargetArr.Add(OverlapMon);
 						}
 						break;
 					case 1:
@@ -179,7 +193,7 @@ void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* 
 						//ArrayName = OtherActor->Tags[0];
 						//FTimerManager& TimerManager = GWorld->GetTimerManager();
 						//TimerManager.SetTimer(TimerHandle , SkillCom , &USkillComponent::ActiveSkill, SkillCom ->Delay, true);
-						
+						TargetArr.Add(OverlapMon);
 						}
 						break;
 					}
@@ -217,7 +231,8 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 						case 1:
 						{
 							SkillCom->SetTarget(Target);
-							
+							//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Green , FString::Printf(TEXT("TargetName:%s") , *Target->GetName()));
+
 							//FTimerManager& TimerManager = GWorld->GetTimerManager();
 							//TimerManager.ClearTimer(TimerHandle);
 							
@@ -306,7 +321,7 @@ void ASummonTower::FindNewTarget_Implementation()
 	float NearDistance=15000.0f;
 	for (AMonster* var : TargetArr)
 	{
-		if (var->MonCurStageHP >= 0)
+		if (var->MonTypeCurHP >= 0)
 		{
 			continue;
 		}
@@ -337,7 +352,7 @@ void ASummonTower::ExAttack_Implementation()
 	//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta, FString::Printf(TEXT("Attack")));
 	if (IsValid(Target))
 	{
-		if (Target->MonCurStageHP > 0)
+		if (Target->MonTypeCurHP > 0)
 		{
 			if (ArrayNum >= 10)
 			{
