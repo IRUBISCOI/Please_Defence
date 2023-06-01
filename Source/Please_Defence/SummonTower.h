@@ -116,6 +116,8 @@ public:
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
 	bool IsOn=false;
+	bool IsSummon=false;
+
 
 	float AttackTimeAcc=0;
 

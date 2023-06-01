@@ -8,6 +8,7 @@
 #include "Engine/World.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/Actor.h"
+#include "Please_Defence_PlayerState.h"
 
 
 // Sets default values
@@ -66,55 +67,74 @@ void ASummonTower::BeginPlay()
 void ASummonTower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Cyan , FString::Printf(TEXT("Bool=%d") , IsOn));
-	if (Cooldown)
-	{
-		float AttackInterval = 0.5;
-		AttackTimeAcc += DeltaTime;
-		if (AttackTimeAcc >= AttackInterval)
+	if(IsSummon)
+	{ 
+		//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Cyan , FString::Printf(TEXT("Bool=%d") , IsOn));
+		if (Cooldown)
 		{
-			AttackTimeAcc = 0;
-			Cooldown = false;
+			
+				switch (MyType)
+				{
+					case 0:
+					{
+						float AttackInterval = NormalTower.Delay;
+						AttackTimeAcc += DeltaTime;
+						if (AttackTimeAcc >= AttackInterval)
+						{
+							AttackTimeAcc = 0;
+							Cooldown = false;
+						}
+					}
+					break;
+					case 1:
+					{
+						float AttackInterval = SkillTower.Delay;
+						AttackTimeAcc += DeltaTime;
+						if (AttackTimeAcc >= AttackInterval)
+						{
+							AttackTimeAcc = 0;
+							Cooldown = false;
+						}
+					}
+					break;
+				}
+			
 		}
-	}
-	else
-	{
-		
-		//if (TargetArr.Num()>0)
-		//{
-			//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Green , FString::Printf(TEXT("TargetHp:%f")));
-			//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Green , FString::Printf(TEXT("Target: %s") , *Target->GetName()));
-			//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Green , FString::Printf(TEXT("TargetHp: %d") , Target->MonTypeHP));
-			//Target->MonTypeHP
+		else
+		{
+			//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Yellow , FString::Printf(TEXT("Else") ));
+			
+			
 			if (IsOn)
 			{
 				//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Red , FString::Printf(TEXT("Bool=%b"), IsOn));
 				
-					switch (MyType)
+				switch (MyType)
+				{
+					case 0:
 					{
-						case 0:
-						{
-						
-								ExAttack();
-								Cooldown=true;
-						}
-						break;
-						case 1:
-						{
-							
-							SkillCom->ActiveSkill();
-							Cooldown = true;
-								
-							
-
-							
-						}
-						break;
-					
+						//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Red , FString::Printf(TEXT("BeforeExAttack")));
+						ExAttack();
+						Cooldown=true;
 					}
+					break;
+					case 1:
+					{
+						
+						SkillCom->ActiveSkill();
+						Cooldown = true;
+							
+						
+
+						
+					}
+					break;
+				
+				}
 				
 			}
-	
+		
+		}
 	}
 	
 	
@@ -123,14 +143,22 @@ void ASummonTower::Tick(float DeltaTime)
 
 void ASummonTower::Call_MissileArrayReset()
 {
-	FOutputDeviceNull Ar;
-	CallFunctionByNameWithArguments(TEXT("MissileArrayReset"),Ar,nullptr,true);
+	FOutputDeviceNull Ar2;
+	bool isCall=CallFunctionByNameWithArguments(TEXT("MissileArrayReset"), Ar2, nullptr, true);
+	if (isCall)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Black , FString::Printf(TEXT("Call_MissileArrayReset")));
+	}
 }
 
 void ASummonTower::Call_SetNormalTarget()
 {
 	FOutputDeviceNull Ar;
-	CallFunctionByNameWithArguments(TEXT("SetNormalTarget") , Ar , nullptr , true);
+	bool isCall=CallFunctionByNameWithArguments(TEXT("SetNormalTarget") , Ar , nullptr , true);
+	if (isCall)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Yellow , FString::Printf(TEXT("Call_SetNormalTarget")));
+	}
 }
 
 void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult)
@@ -144,9 +172,9 @@ void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* 
 			{
 				
 				TargetArr.Add(OverlapMon);
-				GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Black , FString::Printf(TEXT("beforeOnOverlapEndCount: %d") , ArrCount));
-				ArrCount++;
-				GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Black , FString::Printf(TEXT("OnOverlapEndCount: %d") , ArrCount));
+				//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Black , FString::Printf(TEXT("beforeOnOverlapEndCount: %d") , ArrCount));
+				//ArrCount++;
+				//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Black , FString::Printf(TEXT("OnOverlapEndCount: %d") , ArrCount));
 				if (IsValid(Target))
 				{
 					
@@ -160,6 +188,7 @@ void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* 
 					{
 					case 0:
 						{
+						//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Black , FString::Printf(TEXT("Beginoverlap Before Call_setNormaltarget") ));
 						Call_SetNormalTarget();
 						IsOn = true;
 						
@@ -201,16 +230,17 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 						
 								case 0:
 								{
+									//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Yellow , FString::Printf(TEXT("Endoverlap Before Call_setNormaltarget")));
 									Call_SetNormalTarget();
 									IsOn=true;
 								}
-							break;
+								break;
 								case 1:
 								{
 									SkillCom->SetTarget(Target);
 									IsOn = true;
 								}
-							break;
+								break;
 							
 							
 							
@@ -248,16 +278,6 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 		}
 }
 
-					
-				
-				
-				
-
-			
-	
-
-
-
 
 void ASummonTower::FindNewTarget_Implementation()
 {
@@ -279,41 +299,37 @@ void ASummonTower::FindNewTarget_Implementation()
 		{
 			NearDistance= Distance;
 			Target=var;
-			GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Green , FString::Printf(TEXT("Target=%s") , *Target->GetName()));
+			//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Green , FString::Printf(TEXT("Target=%s") , *Target->GetName()));
+			//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Green , FString::Printf(TEXT("Target=%s") , *Target->GetName()));
 		}
 
 	}
 
 }
 
-
-
-
-
 void ASummonTower::ExAttack_Implementation()
 {
-	
+	//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Red , FString::Printf(TEXT("ExAttack") ));
 	if (IsValid(Target))
 	{
-		if (Target->MonCurStageHP > 0)
+		
+		if (ArrayNum >= 10)
 		{
-			if (ArrayNum >= 10)
-			{
-				ArrayNum=0;
-				Call_MissileArrayReset();
+			ArrayNum=0;
+			Call_MissileArrayReset();
 
-			}
-			else
-			{
-				Call_MissileArrayReset();
-			}
 		}
+		else
+		{
+			Call_MissileArrayReset();
+		}
+		
 	}
 }
 
 void ASummonTower::ExSetAttackArray_Implementation()
 {
-
+	//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("ExSetAttackArray") ));
 	for (int i=0;i<10;i++)
 	{ 
 		UObject* cls = StaticLoadObject(UObject::StaticClass() , nullptr , TEXT("Blueprint'/Game/_Dev/Defencer_KHY/BP_Missile.BP_Missile'"));
@@ -329,17 +345,16 @@ void ASummonTower::ExSetAttackArray_Implementation()
 
 void ASummonTower::Summon_Implementation()
 {
+	
 	if (ActorHasTag("Tower"))
 	{
-		
-		
-	
+
 		if (BeforeSummonZone->IsVisible())
 		{
-
-			int RandomInteger = 0;
-			MyType= RandomInteger;
-			switch (RandomInteger)
+			MyType = FMath::RandRange(0 , 2);
+			//int RandomInteger;
+			//MyType= RandomInteger;
+			switch (MyType)
 			{
 				case 0:
 				{
@@ -360,6 +375,7 @@ void ASummonTower::Summon_Implementation()
 						Tags[0] = "MakeTower";
 						
 						SelectTower();
+						IsSummon=true;
 					}
 				}
 
@@ -385,6 +401,7 @@ void ASummonTower::Summon_Implementation()
 					
 						Tags[0] = "MakeTower";
 						SelectTower();
+						IsSummon = true;
 					}
 				}
 				break;
@@ -405,6 +422,7 @@ void ASummonTower::Summon_Implementation()
 						BuffTower.DelayVariance= ExBuffTower->DelayVariance;
 						Tags[0] = "MakeTower";
 						SelectTower();
+						IsSummon = true;
 					}
 
 
