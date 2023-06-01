@@ -115,6 +115,7 @@ void ASummonTower::Tick(float DeltaTime)
 					{
 						//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Red , FString::Printf(TEXT("BeforeExAttack")));
 						ExAttack();
+
 						Cooldown=true;
 					}
 					break;
@@ -189,7 +190,7 @@ void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* 
 					case 0:
 						{
 						//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Black , FString::Printf(TEXT("Beginoverlap Before Call_setNormaltarget") ));
-						Call_SetNormalTarget();
+						//Call_SetNormalTarget();
 						IsOn = true;
 						
 						}
@@ -231,7 +232,7 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 								case 0:
 								{
 									//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Yellow , FString::Printf(TEXT("Endoverlap Before Call_setNormaltarget")));
-									Call_SetNormalTarget();
+									//Call_SetNormalTarget();
 									IsOn=true;
 								}
 								break;
@@ -256,7 +257,7 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 
 							case 0:
 							{
-								Call_SetNormalTarget();
+								//Call_SetNormalTarget();
 								IsOn = true;
 								
 
@@ -313,14 +314,16 @@ void ASummonTower::ExAttack_Implementation()
 	if (IsValid(Target))
 	{
 		
-		if (ArrayNum >= 10)
+		if (ArrayNum >= 9)
 		{
 			ArrayNum=0;
+			Call_SetNormalTarget();
 			Call_MissileArrayReset();
 
 		}
 		else
 		{
+			Call_SetNormalTarget();
 			Call_MissileArrayReset();
 		}
 		
@@ -351,7 +354,8 @@ void ASummonTower::Summon_Implementation()
 
 		if (BeforeSummonZone->IsVisible())
 		{
-			MyType = FMath::RandRange(0 , 2);
+			//MyType = FMath::RandRange(0 , 2);
+			MyType = 0;
 			//int RandomInteger;
 			//MyType= RandomInteger;
 			switch (MyType)
