@@ -136,14 +136,11 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 	if (Player)
 	{
 		SufferDamage(DamageAmount, EventInstigator);
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Player Damage = %f   "), DamageAmount));
 	}
 	else
 	{
 		Player = GetWorld()->GetFirstPlayerController();
 		SufferDamage(DamageAmount, Player);
-
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Tower Damage = %f   "), DamageAmount));
 	}
 	return 0.0f;
 }
@@ -151,8 +148,6 @@ float AMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 void AMonster::SufferDamage(float damage, AController* EventInstigator)
 {
 	MonTypeCurHP -= damage;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::White, FString::Printf(TEXT("After Tower Damage = %f   "), damage));
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::White, FString::Printf(TEXT("MonTypeCurHP  = %f   "), MonTypeCurHP));
 	MonTypeCurHP = FMath::Clamp((float)MonTypeCurHP, 0.0f, (float)MonTypeHP);
 
 	SetHpBar();

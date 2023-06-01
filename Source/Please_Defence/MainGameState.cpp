@@ -16,10 +16,6 @@ void AMainGameState::BeginPlay()
 
 	MonsterCount = ReadMainDT.count.MonACount + ReadMainDT.count.MonBCount + ReadMainDT.count.MonCCount;
 
-	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Blue, FString::Printf(TEXT("AAAA : %d"), ReadMainDT.count.MonACount));
-	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Red, FString::Printf(TEXT("BBBB : %d"), ReadMainDT.count.MonBCount));
-	GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Green, FString::Printf(TEXT("CCCC : %d"), ReadMainDT.count.MonCCount));
-
 	MonsterCount = dt.MaxCount;
 
 	AActor* spawner = UGameplayStatics::GetActorOfClass(GetWorld(), ASpawner::StaticClass());
@@ -27,16 +23,6 @@ void AMainGameState::BeginPlay()
 	AActor* spawnerA = UGameplayStatics::GetActorOfClass(GetWorld(), TypeA);
 	AActor* spawnerB = UGameplayStatics::GetActorOfClass(GetWorld(), TypeB);
 	AActor* spawnerC = UGameplayStatics::GetActorOfClass(GetWorld(), TypeC);
-
-//	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawner::StaticClass(), spArray);
-//
-//	if (spArray.Num() != NULL)
-//	{
-//		for (int i = 0; i < sizeof(spArray); i++)
-//		{
-//			ASpawner* Newsp = Cast<ASpawner>(spArray[i]);
-//		}
-//	}
 
 	Spawner = Cast<ASpawner>(spawner);
 
@@ -84,7 +70,6 @@ void AMainGameState::RemovetoMyList(AMonster* Monster)
 
 	Spawner->mys.push(Monster);
 	
-	// remove시 MyList의 size 체크 하는 부분
 	if (MyList.size() <= 0)
 	{
 		Spawner->bSetPathLocation = false;
