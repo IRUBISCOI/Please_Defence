@@ -67,14 +67,6 @@ void AMainGameState::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	
-
-	CurrentTime += DeltaTime;
-	if (CurrentTime >= DelayTime)
-	{
-		Listupdate();
-		CurrentTime = 0;
-	}
 }
 
 void AMainGameState::StageUp_Implementation()
@@ -83,9 +75,7 @@ void AMainGameState::StageUp_Implementation()
 	{
 		DTLowName = 0;
 	}
-
 	DTLowName += 1;
-
 }
 
 void AMainGameState::RemovetoMyList(AMonster* Monster)
@@ -103,13 +93,22 @@ void AMainGameState::RemovetoMyList(AMonster* Monster)
 	}
 }
 
-void AMainGameState::Listupdate()
+void AMainGameState::Decrease()
 {
-	for (auto iter = MyList.begin(); iter != MyList.end(); ++iter)
+	PlayHP = PlayHP - 1;
+
+	if (PlayHP <= 0)
 	{
-		AMonster* i = *iter;
-		//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Magenta, FString::Printf(TEXT("My List : %s"), *i->GetName()));
+		EndGame();
 	}
+	PlayerHpUpdate();
 }
+
+void AMainGameState::EndGame()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+}
+
+
 
 	

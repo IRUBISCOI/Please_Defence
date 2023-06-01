@@ -11,6 +11,8 @@
 
 #include "MainGameState.generated.h"
 
+#define playerhp 10;
+
 using namespace std;
 
 USTRUCT(Atomic, BlueprintType)
@@ -123,13 +125,18 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void WidgetVisible();
 
-	
 	UFUNCTION()
 	void RemovetoMyList(AMonster* Monster);
 
 	list<AMonster*> MyList;
-	
-	void Listupdate();
-	
 
+	UPROPERTY(BlueprintReadOnly)
+		int PlayHP = playerhp;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void PlayerHpUpdate();
+	UFUNCTION(BlueprintCallable)
+	void Decrease();
+	UFUNCTION()
+	void EndGame();
 };

@@ -51,9 +51,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class AMonster> MonsterFactory;
 
-	float StartDelay_Cur = 0;
-	float StartDelay_Del = 1;
-
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void SpawnerDispatcher();
 	
@@ -83,11 +80,9 @@ public:
 	FTimerHandle timerHandle;
 
 	UFUNCTION()
-		void TTTT();
+		void WaveStart();
 
-	
-
-private:
+	UFUNCTION()
 	void DelayTime();
 	
 

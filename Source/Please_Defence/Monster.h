@@ -94,10 +94,6 @@ public:
 		TSubclassOf<class ASpawner> TypeB;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<class ASpawner> TypeC;
-
-	UFUNCTION()
-	void OnCapsuleBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
-			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 	FVector SplineLoc;
 	FRotator SplineRot;

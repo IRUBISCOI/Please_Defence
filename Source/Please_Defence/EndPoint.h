@@ -31,5 +31,20 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
 
+	class APlease_Defence_PlayerState* PlayerState;
+	class AMonster* Monster;
+	class AMainGameState* MainGameState;
+	class AMonsterMovePath* MonPath;
+
+	FTimerHandle timerhandle;
+
+	UFUNCTION()
+		void DelayTime();
+
+	UFUNCTION()
+		void OnMeshBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+
 
 };

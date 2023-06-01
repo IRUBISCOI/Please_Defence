@@ -30,10 +30,7 @@ void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FTimerManager& timerManager = GetWorld()->GetTimerManager();
-	timerManager.SetTimer(timerHandle, this, &ASpawner::DelayTime, 0.1f, false);
-	
-	//AActor* state = UGameplayStatics::GetActorOfClass(GetWorld(), AMainGameState::StaticClass());
+	DelayTime();
 }
 
 // Called every frame
@@ -48,14 +45,20 @@ void ASpawner::SetStart()
 	bSetPathLocation = true;
 
 	FTimerManager& spawntimeManager = GetWorld()->GetTimerManager();
-	spawntimeManager.SetTimer(timerHandle, this, &ASpawner::TTTT, 1.0f, true);
+	spawntimeManager.SetTimer(timerHandle, this, &ASpawner::WaveStart, 1.0f, true);
 }
 
 void ASpawner::DelayTime()
 {
 	mainState = Cast<AMainGameState>(GetWorld()->GetGameState());
 
-	//GEngine->AddOnScreenDebugMessage(-1, 60, FColor::Green, FString::Printf(TEXT("Spanwer : %s , SpawnCount : %f"), *this->GetName(), SetCount.SpawnCount));
+	if (mainState == NULL)
+	{
+		FTimerManager& timerManager = GetWorld()->GetTimerManager();
+		timerManager.SetTimer(timerHandle, this, &ASpawner::DelayTime, 0.1f, false);
+
+		return;
+	}
 
 	SpawnerDispatcher();
 
@@ -72,7 +75,7 @@ void ASpawner::DelayTime()
 	spawnMon = NULL;
 };
 
-void ASpawner::TTTT()
+void ASpawner::WaveStart()
 {
 	FTimerManager& spawntimeManager = GetWorld()->GetTimerManager();
 	if (bSetPathLocation)

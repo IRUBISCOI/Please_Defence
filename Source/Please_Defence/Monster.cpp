@@ -65,7 +65,6 @@ void AMonster::BeginPlay()
 	AActor* spawnerB = UGameplayStatics::GetActorOfClass(GetWorld(), TypeB);
 	AActor* spawnerC = UGameplayStatics::GetActorOfClass(GetWorld(), TypeC);
 
-
 	MonPath = Cast<AMonsterMovePath>(spline);
 	EndPoint = Cast<AEndPoint>(endpoint);
 	MainState = Cast<AMainGameState>(mainstate);
@@ -75,8 +74,6 @@ void AMonster::BeginPlay()
 	SpawnerB = Cast<ASpawner>(spawnerB);
 	SpawnerC = Cast<ASpawner>(spawnerC);
 
-	Capsule->OnComponentBeginOverlap.AddDynamic(this, &AMonster::OnCapsuleBeginOverlap);
-
 	MonCurStageHP = MainState->dt.MaxHP;
 	MonCurStageSpeed = MainState->dt.Speed;
 
@@ -84,7 +81,6 @@ void AMonster::BeginPlay()
 
 	MonTypeCurHP = MonTypeHP;
 
-	//Capsule->SetVisibility(false);
 	SkeletalMesh->SetVisibility(false);
 	Widget_Front->SetVisibility(false);
 	Widget_Back->SetVisibility(false);
@@ -114,7 +110,6 @@ void AMonster::MoveToSpline(float Value)
 {
 	if (MonPath != nullptr)
 	{
-		//Capsule->SetVisibility(true);
 		SkeletalMesh->SetVisibility(true);
 		Widget_Front->SetVisibility(true);
 		Widget_Back->SetVisibility(true);
@@ -129,28 +124,6 @@ void AMonster::MoveToSpline(float Value)
 		
 		SetActorLocationAndRotation(SplineLoc, SplineRot);
 		SetActorScale3D(FVector(1));
-	}
-}
-
-void AMonster::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (OtherActor == EndPoint)
-	{
-		//Capsule->SetVisibility(false);
-		SkeletalMesh->SetVisibility(false);
-		Widget_Front->SetVisibility(false);
-		Widget_Back->SetVisibility(false);
-
-		Capsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-		FVector Loc0 = MonPath->Spline->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World);
-
-		this->SetActorLocation(Loc0);
-
-		this->MonsterStop();
-
-		MainState->RemovetoMyList(this);
 	}
 }
 
@@ -186,7 +159,6 @@ void AMonster::SufferDamage(float damage, AController* EventInstigator)
 
 	if (!MonTypeCurHP)
 	{
-		//Capsule->SetVisibility(false);
 		SkeletalMesh->SetVisibility(false);
 		Widget_Front->SetVisibility(false);
 		Widget_Back->SetVisibility(false);
