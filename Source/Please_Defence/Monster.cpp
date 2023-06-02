@@ -79,8 +79,6 @@ void AMonster::BeginPlay()
 
 	MonsterDispatcher();
 
-	MonTypeCurHP = MonTypeHP;
-
 	SkeletalMesh->SetVisibility(false);
 	Widget_Front->SetVisibility(false);
 	Widget_Back->SetVisibility(false);

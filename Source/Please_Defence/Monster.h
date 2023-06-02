@@ -110,7 +110,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Gain_Gold(AController* target);
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetHpBar();
 
 };
