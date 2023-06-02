@@ -83,7 +83,7 @@ void AEndPoint::OnMeshBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 		
 		MainGameState->RemovetoMyList(Monster);
 
-		MainGameState->PlayerHpUpdate();
+		MainGameState->Decrease();
 	}
 }
 

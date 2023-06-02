@@ -7,7 +7,6 @@
 
 #include "Kismet/GameplayStatics.h"
 
-
 // Called when the game starts or when spawned
 void AMainGameState::BeginPlay()
 {
