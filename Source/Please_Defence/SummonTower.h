@@ -64,6 +64,8 @@ public:
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
 	int MyType =10;
 
+	bool NullArr=true;
+
 
 
 	FTimerHandle TimerHandle;

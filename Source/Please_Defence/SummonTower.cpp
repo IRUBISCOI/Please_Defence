@@ -222,55 +222,34 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 					//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Black , FString::Printf(TEXT("Beforetargetarr: %d") , TargetArr.Num()));
 					TargetArr.Remove(OverlapMon);
 					
-					if (!IsValid(Target))
+					if (Target==OverlapMon)
 					{
 						
 						FindNewTarget();
-						switch (MyType)
+						if (NullArr)
 						{
+
 						
+							switch (MyType)
+							{
+
 								case 0:
 								{
-									//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Yellow , FString::Printf(TEXT("Endoverlap Before Call_setNormaltarget")));
 									//Call_SetNormalTarget();
-									IsOn=true;
+									IsOn = true;
+									
+
 								}
 								break;
 								case 1:
 								{
 									SkillCom->SetTarget(Target);
 									IsOn = true;
+									
 								}
 								break;
-							
-							
-							
-						}
-					}
-					else if (Target==OverlapMon)
-					{
-						
-						FindNewTarget();
-						
-						switch (MyType)
-						{
-
-							case 0:
-							{
-								//Call_SetNormalTarget();
-								IsOn = true;
-								
 
 							}
-							break;
-							case 1:
-							{
-								SkillCom->SetTarget(Target);
-								IsOn = true;
-								
-							}
-							break;
-
 						}
 					}
 					
@@ -289,6 +268,7 @@ void ASummonTower::FindNewTarget_Implementation()
 	{
 
 		IsOn = false;
+		NullArr=false;
 		GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Magenta , FString::Printf(TEXT("IsOn=false")));
 		return;
 	}
@@ -300,6 +280,7 @@ void ASummonTower::FindNewTarget_Implementation()
 		{
 			NearDistance= Distance;
 			Target=var;
+			NullArr=true;
 			//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Green , FString::Printf(TEXT("Target=%s") , *Target->GetName()));
 			//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Green , FString::Printf(TEXT("Target=%s") , *Target->GetName()));
 		}
@@ -311,9 +292,7 @@ void ASummonTower::FindNewTarget_Implementation()
 void ASummonTower::ExAttack_Implementation()
 {
 	//GEngine->AddOnScreenDebugMessage(-1 , 100 , FColor::Red , FString::Printf(TEXT("ExAttack") ));
-	if (IsValid(Target))
-	{
-		
+	
 		if (ArrayNum >= 9)
 		{
 			ArrayNum=0;
@@ -327,7 +306,7 @@ void ASummonTower::ExAttack_Implementation()
 			Call_MissileArrayReset();
 		}
 		
-	}
+	
 }
 
 void ASummonTower::ExSetAttackArray_Implementation()
