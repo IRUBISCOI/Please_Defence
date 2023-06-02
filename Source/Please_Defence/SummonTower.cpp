@@ -121,7 +121,7 @@ void ASummonTower::Tick(float DeltaTime)
 					break;
 					case 1:
 					{
-						
+						SkillCom->SetTarget(Target);
 						SkillCom->ActiveSkill();
 						Cooldown = true;
 							
@@ -197,9 +197,9 @@ void ASummonTower::OnOverlapBegin(UPrimitiveComponent* OverlappedComp , AActor* 
 						break;
 					case 1:
 						{
-						SkillCom->SetTarget(Target);
-						SkillCom->ClearEmitter();
 						
+						//SkillCom->ClearEmitter();
+						//SkillCom->SetTarget(Target);
 						IsOn = true;
 						}
 						break;
@@ -243,7 +243,7 @@ void ASummonTower::OnOverlapEnd(UPrimitiveComponent* OverlappedComp , AActor* Ot
 								break;
 								case 1:
 								{
-									SkillCom->SetTarget(Target);
+									//SkillCom->SetTarget(Target);
 									IsOn = true;
 									
 								}
@@ -333,8 +333,8 @@ void ASummonTower::Summon_Implementation()
 
 		if (BeforeSummonZone->IsVisible())
 		{
-			//MyType = FMath::RandRange(0 , 2);
-			MyType = 0;
+			MyType = FMath::RandRange(0 , 2);
+			
 			//int RandomInteger;
 			//MyType= RandomInteger;
 			switch (MyType)
@@ -355,7 +355,7 @@ void ASummonTower::Summon_Implementation()
 						NormalTower.Damage= ExNormalTower->Damage;
 						NormalTower.Delay= ExNormalTower->Delay;
 						////GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Damage:%f") , NormalTower.Damage));
-						Tags[0] = "MakeTower";
+						Tags[0] = "ComPleted";
 						
 						SelectTower();
 						IsSummon=true;
@@ -382,7 +382,7 @@ void ASummonTower::Summon_Implementation()
 						SkillTower.Particle =ExSkillTower->Particle;
 						
 					
-						Tags[0] = "MakeTower";
+						Tags[0] = "ComPleted";
 						SelectTower();
 						IsSummon = true;
 					}
@@ -403,7 +403,7 @@ void ASummonTower::Summon_Implementation()
 						BuffTower.Particle= ExBuffTower->Particle;
 						BuffTower.DamageVariance= ExBuffTower->DamageVariance;
 						BuffTower.DelayVariance= ExBuffTower->DelayVariance;
-						Tags[0] = "MakeTower";
+						Tags[0] = "ComPleted";
 						SelectTower();
 						IsSummon = true;
 					}

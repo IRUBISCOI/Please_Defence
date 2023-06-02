@@ -51,26 +51,26 @@ void USkillComponent::ActiveSkill_Implementation()
 	if (IsValid(Target))
 	{
 		Location = Target->GetActorLocation();
-		if (Particle!=nullptr)
+		
+		FTimerManager& TimerManager = GWorld->GetTimerManager();
+		if (IsValid(SettingEmitter))
 		{
-			FTimerManager& TimerManager = GWorld->GetTimerManager();
-			if (IsValid(SettingEmitter))
-			{
-				SettingEmitter->SetWorldLocation(Location);
-				SettingEmitter->Activate(true);
-			}
-			else
-			{
-
-				SettingEmitter = UGameplayStatics::SpawnEmitterAtLocation(GetWorld() , Particle , Location , FRotator::ZeroRotator , FVector(1.f , 1.f , 1.f) , true , EPSCPoolMethod::None , true);
-			}
-			UGameplayStatics::ApplyDamage(Target , Damage, nullptr , nullptr , UDamageType::StaticClass());
-			TimerManager.SetTimer(TimerHandle ,this,&USkillComponent::ClearEmitter_Implementation ,Delay-0.1f ,false );
-			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("Damage: %f") , Damage));
-			//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Emitter:%s"), *(SettingEmitter->GetName())));
-
-
+			SettingEmitter->SetWorldLocation(Location);
+			SettingEmitter->Activate(true);
 		}
+		else
+		{
+
+			SettingEmitter = UGameplayStatics::SpawnEmitterAtLocation(GetWorld() , Particle , Location , FRotator::ZeroRotator , FVector(1.f , 1.f , 1.f) , false , EPSCPoolMethod::None , true);
+		}
+		UGameplayStatics::ApplyDamage(Target , Damage, nullptr , nullptr , UDamageType::StaticClass());
+		Target=nullptr;
+		//TimerManager.SetTimer(TimerHandle ,this,&USkillComponent::ClearEmitter_Implementation ,Delay-0.1f ,false );
+		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("Damage: %f") , ));
+		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("Emitter:%s"), *(SettingEmitter->GetName())));
+
+
+		
 		
 	}
 
@@ -84,7 +84,8 @@ void USkillComponent::ClearEmitter_Implementation()
 	{ 
 		//SettingEmitter->DestroyComponent();
 		//SettingEmitter=nullptr;
-		SettingEmitter->SetActive(false);
+		//SettingEmitter->SetActive(false);
+		SettingEmitter->Activate(false);
 		TimerManager.ClearTimer(TimerHandle);
 		//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("ClearEmitter") ));
 	}
