@@ -346,13 +346,15 @@ void ASummonTower::Summon_Implementation()
 				{
 					UDataTable* ZDataTable = LoadObject<UDataTable>(nullptr , TEXT("DataTable'/Game/_Dev/Defencer_KHY/DataTable/DT_ExNormalTower.DT_ExNormalTower'"));
 					FName  ZeroRandomIntegerName = "";
+					FST_NormalTower *ExNormalTower;
 					int ZeroRandomInteger = FMath::RandRange(0 , 2);
 					ZeroRandomIntegerName = FName(*FString::FromInt(ZeroRandomInteger));
-					FST_NormalTower *ExNormalTower;
 
 					ExNormalTower = ZDataTable->FindRow<FST_NormalTower>(ZeroRandomIntegerName , FString("NormalTowerError"));
+					//GEngine->AddOnScreenDebugMessage(-1 , 20 , FColor::Red , FString::Printf(TEXT("SummonNormalTower") ));
 					if (IsValid(ExNormalTower->StaticMesh))
 					{
+						//GEngine->AddOnScreenDebugMessage(-1 , 20 , FColor::Yellow , FString::Printf(TEXT("AfterSummonNormalTowerStaticMeshIsValid")));
 						Tower->SetStaticMesh(ExNormalTower->StaticMesh);
 						NormalTower.AttackDistacne= ExNormalTower->AttackDistacne;
 						NormalTower.Damage= ExNormalTower->Damage;
