@@ -33,10 +33,13 @@ ASummonTower::ASummonTower()
 		Tower->SetCollisionProfileName(FName(TEXT("NoCollision")));
 
 		BeforeSummonZone->SetCollisionProfileName(FName(TEXT("NoCollision")));
-		BeforeSummonZone->AttachToComponent(StaticMeshCom , FAttachmentTransformRules::KeepRelativeTransform);
+		BeforeSummonZone->SetupAttachment(StaticMeshCom);
+		//BeforeSummonZone->AttachToComponent(StaticMeshCom , FAttachmentTransformRules::KeepRelativeTransform);
 		BeforeSummonZone->SetRelativeLocation(FVector(GetActorLocation().X , GetActorLocation().Y , GetActorLocation().Z + 150));
-		Tower->AttachToComponent(BeforeSummonZone , FAttachmentTransformRules::KeepWorldTransform);
-		Box->AttachToComponent(StaticMeshCom , FAttachmentTransformRules::KeepWorldTransform);
+		//Tower->AttachToComponent(BeforeSummonZone , FAttachmentTransformRules::KeepWorldTransform);
+		Tower->SetupAttachment(BeforeSummonZone);
+		//Box->AttachToComponent(StaticMeshCom , FAttachmentTransformRules::KeepWorldTransform);
+		Box->SetupAttachment(StaticMeshCom);
 		Box->SetCollisionProfileName(FName(TEXT("OverlapAll")));
 		
 		Tower->SetRelativeLocation(FVector(0,0,0));
@@ -369,7 +372,7 @@ void ASummonTower::Summon_Implementation()
 					FName  FirstRandomIntegerName = "";
 					FST_SKillTower* ExSkillTower;
 					int FirstRandomInteger = FMath::RandRange(0 , 2);
-					FirstRandomInteger = 1;
+					//FirstRandomInteger = 1;
 					FirstRandomIntegerName = FName(*FString::FromInt(FirstRandomInteger));
 					ExSkillTower = FDataTable->FindRow<FST_SKillTower>(FirstRandomIntegerName , FString("SkillTowerError"));
 					if (IsValid(ExSkillTower->StaticMesh))
