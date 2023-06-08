@@ -14,6 +14,7 @@
 #include "ST_SKillTower.h"
 #include "Misc/OutputDeviceNull.h"
 #include "Components/CapsuleComponent.h"
+#include "ExMissile.h"
 #include "SummonTower.generated.h"
 
 
@@ -76,8 +77,13 @@ public:
 	AActor* Missile;
 
 	UPROPERTY(EditAnywhere , BlueprintReadWrite)
-	TArray <AActor*> MissileArray;
+	TArray <AExMissile*> MissileArray;
 
+	UPROPERTY(EditAnywhere , BlueprintReadWrite)
+	TSubclassOf<class AExMissile> MissileFactory;
+
+	UPROPERTY(EditAnywhere)
+	AExMissile* SpawnMissile;
 
 	
 	

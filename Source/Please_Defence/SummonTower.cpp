@@ -8,6 +8,8 @@
 #include "Engine/World.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/Actor.h"
+#include "ExMissile.h"
+#include "Monster.h"
 #include "Please_Defence_PlayerState.h"
 
 
@@ -317,12 +319,14 @@ void ASummonTower::ExSetAttackArray_Implementation()
 	//GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Red , FString::Printf(TEXT("ExSetAttackArray") ));
 	for (int i=0;i<10;i++)
 	{ 
-		UObject* cls = StaticLoadObject(UObject::StaticClass() , nullptr , TEXT("Blueprint'/Game/_Dev/Defencer_KHY/BP_Missile.BP_Missile'"));
-		UBlueprint* bp = Cast<UBlueprint>(cls);
-		TSubclassOf<class UObject> blockBP = (UClass*)bp->GeneratedClass;
-		Missile= GetWorld()->SpawnActor<AActor>(blockBP , Tower->GetComponentTransform());
-		MissileArray.Add(Missile);
-		
+		//UObject* cls = StaticLoadObject(UObject::StaticClass() , nullptr , TEXT("Blueprint'/Game/_Dev/Defencer_KHY/BP_Missile.BP_Missile'"));
+		//UBlueprint* bp = Cast<UBlueprint>(cls);
+		//TSubclassOf<class UObject> blockBP = (UClass*)bp->GeneratedClass;
+		//Missile= GetWorld()->SpawnActor<AActor>(blockBP , Tower->GetComponentTransform());
+		//MissileArray.Add(Missile);
+		SpawnMissile = GetWorld()->SpawnActor<AExMissile>(MissileFactory , Tower->GetComponentTransform());
+
+		MissileArray.Add(SpawnMissile);
 	}
 	
 	
