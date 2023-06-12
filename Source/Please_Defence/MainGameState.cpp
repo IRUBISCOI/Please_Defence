@@ -84,14 +84,11 @@ void AMainGameState::Decrease()
 	if (PlayHP <= 0)
 	{
 		EndGame();
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
 	}
 	PlayerHpUpdate();
 }
 
-void AMainGameState::EndGame()
-{
-	UGameplayStatics::SetGamePaused(GetWorld(), true);
-}
 
 
 

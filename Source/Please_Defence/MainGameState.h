@@ -137,6 +137,6 @@ public:
 	void PlayerHpUpdate();
 	UFUNCTION(BlueprintCallable)
 	void Decrease();
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void EndGame();
 };
