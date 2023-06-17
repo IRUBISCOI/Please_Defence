@@ -52,19 +52,19 @@ public:
 	TSubclassOf<class AMonster> MonsterFactory;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		void SpawnerDispatcher();
+	void SpawnerDispatcher();
 	
 	UPROPERTY()
-		class AMainGameState* mainState;
+	class AMainGameState* mainState;
 
 	UPROPERTY(EditAnywhere)
 	AMonster* spawnMon;
 
 	UFUNCTION(BlueprintCallable)
-		void SetStart();
+	void SetStart();
 
 	UPROPERTY(BlueprintReadWrite)
-		float CurSpawnCount = 0;
+	float CurSpawnCount = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Totalcount = MAXCOUNT;
 
@@ -74,13 +74,13 @@ public:
 	bool bSetPathLocation = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FTypeCount SetCount;
+	FTypeCount SetCount;
 	
 
 	FTimerHandle timerHandle;
 
 	UFUNCTION()
-		void WaveStart();
+	void WaveStart();
 
 	UFUNCTION()
 	void DelayTime();

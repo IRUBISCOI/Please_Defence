@@ -16,35 +16,17 @@
 using namespace std;
 
 USTRUCT(Atomic, BlueprintType)
-struct Fmaindt
-{
-	GENERATED_BODY()
-
-		UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int Stage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MaxHP;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MaxCount;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float Speed;
-};
-
-USTRUCT(Atomic, BlueprintType)
 
 struct FCount
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MonACount;
+	int MonACount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MonBCount;
+	int MonBCount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MonCCount;
+	int MonCCount;
 };
 
 USTRUCT(Atomic, BlueprintType)
@@ -54,11 +36,11 @@ struct FReadMainDT
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MainStage;
+	int MainStage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float CorrectionValue;
+	float CorrectionValue;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		struct FCount count;
+	struct FCount count;
 };
 
 /**
@@ -83,45 +65,43 @@ public:
 	void LoadDT();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	Fmaindt dt;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FReadMainDT ReadMainDT;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<class ASpawner> TypeA;
+	TSubclassOf<class ASpawner> TypeA;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<class ASpawner> TypeB;
+	TSubclassOf<class ASpawner> TypeB;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<class ASpawner> TypeC;
+	TSubclassOf<class ASpawner> TypeC;
 
 	UPROPERTY(BlueprintReadWrite)
-		int MonsterCount;
+	int MonsterCount;
 
 	UPROPERTY(BlueprintReadWrite)
-		float CurrentTime = 0;
+	float CurrentTime = 0;
 	UPROPERTY(BlueprintReadWrite)
-		float DelayTime = 1;
+	float DelayTime = 1;
 	UPROPERTY(BlueprintReadWrite)
-		bool bSpawnTimeBoolean = false;
+	bool bSpawnTimeBoolean = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		ASpawner* Spawner;
+	ASpawner* Spawner;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		ASpawner* SpawnMonTypeA;
+	ASpawner* SpawnMonTypeA;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		ASpawner* SpawnMonTypeB;
+	ASpawner* SpawnMonTypeB;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		ASpawner* SpawnMonTypeC;
+	ASpawner* SpawnMonTypeC;
 
 //	TArray<AActor*> spArray;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-		void StageUp();
+	void StageUp();
 	UPROPERTY(BlueprintReadOnly)
-		int DTLowName = 1;
+	int DTLowName = 1;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		void MisstionStart();
+	void MisstionStart();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void WidgetVisible();
 
@@ -131,7 +111,7 @@ public:
 	list<AMonster*> MyList;
 
 	UPROPERTY(BlueprintReadOnly)
-		int PlayHP = playerhp;
+	int PlayHP = playerhp;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void PlayerHpUpdate();

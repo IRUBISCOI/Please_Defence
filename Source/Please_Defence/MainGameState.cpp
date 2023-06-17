@@ -15,8 +15,6 @@ void AMainGameState::BeginPlay()
 
 	MonsterCount = ReadMainDT.count.MonACount + ReadMainDT.count.MonBCount + ReadMainDT.count.MonCCount;
 
-	MonsterCount = dt.MaxCount;
-
 	AActor* spawner = UGameplayStatics::GetActorOfClass(GetWorld(), ASpawner::StaticClass());
 
 	AActor* spawnerA = UGameplayStatics::GetActorOfClass(GetWorld(), TypeA);
