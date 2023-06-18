@@ -74,9 +74,7 @@ void AMonster::BeginPlay()
 	SpawnerB = Cast<ASpawner>(spawnerB);
 	SpawnerC = Cast<ASpawner>(spawnerC);
 
-	MonCurStageHP = MainState->dt.MaxHP;
-	MonCurStageSpeed = MainState->dt.Speed;
-
+	
 	MonsterDispatcher();
 
 	SkeletalMesh->SetVisibility(false);

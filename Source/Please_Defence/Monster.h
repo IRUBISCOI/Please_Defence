@@ -57,27 +57,20 @@ public:
 	void MonsterDispatcher();
 
 	UFUNCTION(BlueprintCallable)
-		void MoveToSpline(float Value);
+	void MoveToSpline(float Value);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float CurveTrack;
+	int MonTypeHP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonCurStageHP;
+	float MonTypeSpeed = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonCurStageSpeed;
+	int MonTypeMoney = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MonTypeHP;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MonTypeSpeed = 0.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MonTypeMoney = 0;
+	int MonTypeCurHP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int MonTypeCurHP;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float CorrectionValue;
+	float CorrectionValue;
 
 	class AMonsterMovePath* MonPath;
 	class AEndPoint* EndPoint;
@@ -89,23 +82,23 @@ public:
 	class ASpawner* SpawnerC;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<class ASpawner> TypeA;
+	TSubclassOf<class ASpawner> TypeA;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<class ASpawner> TypeB;
+	TSubclassOf<class ASpawner> TypeB;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TSubclassOf<class ASpawner> TypeC;
+	TSubclassOf<class ASpawner> TypeC;
 	
 	FVector SplineLoc;
 	FRotator SplineRot;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
-		class AController* EventInstigator, AActor* DamageCauser) override;
+	class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION()
 	void SufferDamage(float damage, AController* EventInstigator);
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		void DieAnimation();
+	void DieAnimation();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Gain_Gold(AController* target);

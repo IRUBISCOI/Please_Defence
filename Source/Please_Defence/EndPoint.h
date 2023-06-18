@@ -39,10 +39,10 @@ public:
 	FTimerHandle timerhandle;
 
 	UFUNCTION()
-		void DelayTime();
+	void DelayTime();
 
 	UFUNCTION()
-		void OnMeshBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+	void OnMeshBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 
