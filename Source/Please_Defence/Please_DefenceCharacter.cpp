@@ -70,9 +70,9 @@ APlease_DefenceCharacter::APlease_DefenceCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Shoot(TEXT("AnimMontage'/Game/RifleAnimsetPro/Animations/RifleAnimSet/Rifle_ShootOnce_Montage.Rifle_ShootOnce_Montage'"));
-	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Reload(TEXT("AnimMontage'/Game/RifleAnimsetPro/Animations/RifleAnimSet/Rifle_Reload_2_Montage.Rifle_Reload_2_Montage'"));
-	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Construct(TEXT("AnimMontage'/Game/RifleAnimsetPro/Animations/RifleAnimSet/A_2handHighCast_Montage.A_2handHighCast_Montage'"));
+	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Shoot(TEXT("AnimMontage'/Game/_Dev/Character_CSH/Character/Animation/Mixamo/Firing_Rifle_mixamo_com_Montage.Firing_Rifle_mixamo_com_Montage'"));
+	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Reload(TEXT("AnimMontage'/Game/_Dev/Character_CSH/Character/Animation/Mixamo/Reloading_mixamo_com_Montage.Reloading_mixamo_com_Montage'"));
+	ConstructorHelpers::FObjectFinder<UAnimMontage> montage_Construct(TEXT("AnimMontage'/Game/_Dev/Character_CSH/Character/Animation/Mixamo/Looking_mixamo_com_Montage.Looking_mixamo_com_Montage'"));
 	
 	AnimMontage_Shoot = montage_Shoot.Object;
 	AnimMontage_Reload = montage_Reload.Object;
