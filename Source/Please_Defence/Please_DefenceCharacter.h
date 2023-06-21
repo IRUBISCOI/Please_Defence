@@ -75,7 +75,9 @@ protected:
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
+	UFUNCTION(BlueprintCallable)
 	void Shoot();
+	UFUNCTION(BlueprintCallable)
 	void Reload();
 
 	float ControlPitch;
