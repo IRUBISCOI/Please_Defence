@@ -122,6 +122,14 @@ void APlease_DefenceCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &APlease_DefenceCharacter::Reload);
 }
 
+void APlease_DefenceCharacter::ExTouch_Implementation(FVector Location)
+{
+	
+	GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("loactionX = %f") , Location.X));
+	GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("loactionY = %f") , Location.Y));
+	GEngine->AddOnScreenDebugMessage(-1 , 10 , FColor::Magenta , FString::Printf(TEXT("loactionZ = %f") , Location.Z));
+}
+
 
 void APlease_DefenceCharacter::OnResetVR()
 {
@@ -136,12 +144,13 @@ void APlease_DefenceCharacter::OnResetVR()
 
 void APlease_DefenceCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
-		Jump();
+		//Jump();
+	ExTouch(Location);
 }
 
 void APlease_DefenceCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
-		StopJumping();
+		//StopJumping();0
 }
 
 void APlease_DefenceCharacter::TurnAtRate(float Rate)
@@ -206,7 +215,7 @@ void APlease_DefenceCharacter::Shoot()
 {
 	if (!IsEquipWeapon)
 	{
-		Construstion();
+		//Construstion();
 		return;
 	}
 
