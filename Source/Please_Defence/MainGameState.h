@@ -105,9 +105,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void WidgetVisible();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool bIsSkip;
-
 	UFUNCTION()
 	void RemovetoMyList(AMonster* Monster);
 

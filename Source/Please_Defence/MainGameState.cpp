@@ -43,8 +43,6 @@ void AMainGameState::BeginPlay()
 	{
 		SpawnMonTypeC->SetCount.SpawnCount = ReadMainDT.count.MonCCount;
 	}
-
-	bIsSkip = true;
 }
 
 // Called every frame
