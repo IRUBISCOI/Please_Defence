@@ -17,7 +17,7 @@ class PLEASE_DEFENCE_API APlease_Defence_PlayerState : public APlayerState
 
 private:
 
-	int Weapon_Damage = 15;
+	int Weapon_Damage = 30;
 
 	int Gold = 0;
 

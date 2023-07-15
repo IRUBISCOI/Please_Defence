@@ -43,7 +43,7 @@ public:
 	int Ammo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int Damage = 15;
+	int Damage = 30;
 
 	void Shoot();
 
